@@ -26,11 +26,8 @@ Separate nodes by language
 For multilingual sites. Nodes can be selected in the language in which they
 were created.
 
-
 -- REQUIREMENTS --
 None
 
-
 -- CONTACT --
 Dmitriy Makeev - http://drupal.org/user/1302446
-

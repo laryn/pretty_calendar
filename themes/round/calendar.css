@@ -217,8 +217,9 @@
   margin-left: -7px;
   margin-top: -6px;
 }
-#tiptip_content ul{ list-style: none;
+#tiptip_content ul {
   font-size: 11px;
+  list-style: none;
   margin: 0;
   padding: 5px 10px;
 }

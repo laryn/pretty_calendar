@@ -248,10 +248,10 @@ function russian_beauty_calendar_block_view($delta = '') {
 
   if (arg(0) == 'calendar') {
     if (arg(1) > 0) {
-      $y = (int)arg(1);
+      $y = (int) arg(1);
     }
     if (arg(2) > 0) {
-      $m = (int)arg(2);
+      $m = (int) arg(2);
     }
   }
 
@@ -356,10 +356,10 @@ function russian_beauty_calendar_block_content($month) {
         $field_name .= '_value';
       }
       if (isset($row->$field_name)) {
-        $day_nids[(int)date('d', strtotime($row->$field_name))]++;
+        $day_nids[(int) date('d', strtotime($row->$field_name))]++;
       }
-      else if (isset($row->created)) {
-        $day_nids[(int)date('d', $row->created)]++;
+      elseif (isset($row->created)) {
+        $day_nids[(int) date('d', $row->created)]++;
       }
     }
   }

@@ -4,8 +4,10 @@
  * @file
  * Install and uninstall functions for the Russian Beauty Calendar module
  */
- 
-// hook_install()
+
+/**
+ * Implements hook_install().
+ */
 function russian_beauty_calendar_install() {
   variable_set('russian_beauty_calendar_theme', 'round');
   variable_set('russian_beauty_calendar_node_type', '');
@@ -17,7 +19,9 @@ function russian_beauty_calendar_install() {
   variable_set('russian_beauty_calendar_separate_languages', FALSE);
 }
 
-// hook_uninstall()
+/**
+ * Implements hook_uninstall().
+ */
 function russian_beauty_calendar_uninstall() {
   db_query("DELETE FROM {variable} WHERE name LIKE 'russian_beauty_calendar_%'");
   cache_clear_all('variables', 'cache');
