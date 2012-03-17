@@ -1,110 +1,113 @@
 /* calendar styles */
 #calendar-body {
-  width: 100%;
   position: relative;
+  width: 100%;
 }
 .block-calendar {
-  width: 100%;
   min-height: 40px;
+  width: 100%;
 }
 .block-calendar a {
   text-decoration: none;
 }
 .calendar-container {
-  border: 1px solid #BBB;
+  background-color: #fff;
+  border: 1px solid #bbb;
   border-radius: 5px;
-  padding-bottom: 5px;
-  background-color: #FFF;
-  margin: 0;
   font-family: Calibri,Tahoma,Arial,sans;
-}
-.rbc_week, .rbc_daynames {
-  width: 100%;
-  overflow: hidden;
-  height: 28px;
-  white-space: nowrap;
-  font-size: 12px;
   margin: 0;
-  padding: 1% 0 0;
+  padding-bottom: 5px;
 }
-.calendar-container .rbc_weekend, .calendar-container .rbc_day {
-  width: 14%;
-  height: 26px;
-  overflow: visible;
+.rbc_week,
+.rbc_daynames {
+  font-size: 12px;
+  height: 28px;
+  margin: 0;
+  overflow: hidden;
+  padding: 1% 0 0;
+  white-space: nowrap;
+  width: 100%;
+}
+.calendar-container .rbc_weekend,
+.calendar-container .rbc_day {
   display: inline;
   float: left;
+  height: 26px;
+  overflow: visible;
   text-align: center;
+  width: 14%;
 }
-.calendar-container .rbc_weekend  {
+.calendar-container .rbc_weekend {
+  color: #79c;
   width: 15%;
-  color: #79C;
 }
 .rbc_week .rbc_value {
-  width: 23px;
-  height: 19px;
-  padding-top: 4px;
-  border: 1px solid #EEE;
+  border: 1px solid #eee;
   border-radius: 22px;
-  text-align: center;
+  height: 19px;
   margin: auto;
+  padding-top: 4px;
+  text-align: center;
+  width: 23px;
 }
 .blank .rbc_value {
-  background-color: #F6F6F6;
-  border-color: #F4F4F4;
+  background-color: #f6f6f6;
+  border-color: #f4f4f4;
 }
 .rbc_week a .rbc_value {
-  color: #FFF;
-  background-color: #48F;
-  border-color: #37E;
+  background-color: #48f;
+  border-color: #37e;
+  color: #fff;
 }
 .rbc_week a:hover .rbc_value {
-  color: #FFF;
-  background-color: #59F;
-  border-color: #48F;
+  background-color: #59f;
+  border-color: #48f;
+  color: #fff;
 }
 .rbc_week .rbc_today .rbc_value {
-  color: #48F;
+  border: 2px solid #48f;
+  color: #48f;
   font-weight: bold;
-  width: 21px;
   height: 17px;
-  border: 2px solid #48F;
+  width: 21px;
 }
 .rbc_daynames {
-  padding: 38px 0 0;
-  height: 18px;
   background: url("bg.png") repeat-x 0 32px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #e0e0e0;
+  height: 18px;
   margin-bottom: 6px;
+  padding: 38px 0 0;
 }
 
 .rbc_month {
-  position: absolute;
-  top: 0;
+  border-bottom: 1px solid #e0e0e0;
   height: 27px;
-  text-transform: uppercase;
-  width: 100%;
   padding-top: 5px;
+  position: absolute;
   text-align: center;
-  border-bottom: 1px solid #E0E0E0;
+  text-transform: uppercase;
+  top: 0;
+  width: 100%;
 }
 .rbc_month .month-title {
   padding-top: 2px;
 }
-.rbc_month .calendar-prev, .rbc_month .calendar-next  {
-  position: absolute;
-  width: 20px;
+.rbc_month .calendar-prev,
+.rbc_month .calendar-next {
+  border: none;
   height: 20px;
   margin: 0;
   padding: 0;
-  border: none;
+  position: absolute;
+  width: 20px;
 }
 .rbc_month .calendar-prev {
-  top: 6px;
   left: 6px;
+  top: 6px;
 }
 .rbc_month .calendar-next {
-  top: 6px;
   right: 6px;
+  top: 6px;
 }
 .rbc_month a .calendar-prev {
   background: transparent url("arrows.png") no-repeat 0 0;
@@ -121,25 +124,26 @@
 
 /* calendar loader styles */
 .calendar_loader {
-  width: 0px;
   height: 0px;
-  position: absolute;
   left: 50%;
+  position: absolute;
   top: 50%;
+  width: 0px;
 }
 .calendar_loader div {
+  background: url("ajax-loader.gif") no-repeat;
+  height: 16px;
   margin-left: -10px;
   margin-top: -10px;
-  background: url("ajax-loader.gif") no-repeat;
   width: 16px;
-  height: 16px;}
+}
 
 /* tooltip styles */
 #tiptip_holder {
   display: none;
+  left: 0;
   position: absolute;
   top: 0;
-  left: 0;
   z-index: 99999;
 }
 #tiptip_holder.tip_top {
@@ -155,25 +159,26 @@
   padding-right: 5px;
 }
 #tiptip_content {
+  -moz-border-radius: 3px;
+  -moz-box-shadow: 0 0 3px #48f;
+  -webkit-border-radius: 3px;
+  -webkit-box-shadow: 0 0 3px #48f;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 3px;
+  box-shadow: 0 0 3px #48f;
+  color: #333;
   font-size: 11px;
   line-height: 1.3em;
-  color: #333;
   padding: 4px 8px;
-  border: 1px solid rgba(0,0,0,0.25);
-  background-color: #FFF;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  box-shadow: 0 0 3px #48F;
-  -webkit-box-shadow: 0 0 3px #48F;
-  -moz-box-shadow: 0 0 3px #48F;
 }
-#tiptip_arrow, #tiptip_arrow_inner {
-  position: absolute;
+#tiptip_arrow,
+#tiptip_arrow_inner {
   border-color: transparent;
   border-style: solid;
   border-width: 6px;
   height: 0;
+  position: absolute;
   width: 0;
 }
 #tiptip_holder.tip_top #tiptip_arrow {
@@ -193,45 +198,46 @@
   border-left-color: rgba(255,255,255,0.35);
 }
 #tiptip_holder.tip_top #tiptip_arrow_inner {
-  margin-top: -7px;
+  border-top-color: #fff;
   margin-left: -6px;
-  border-top-color: #FFF;
+  margin-top: -7px;
 }
 #tiptip_holder.tip_bottom #tiptip_arrow_inner {
-  margin-top: -5px;
+  border-bottom-color: #fff;
   margin-left: -6px;
-  border-bottom-color: #FFF;
+  margin-top: -5px;
 }
 #tiptip_holder.tip_right #tiptip_arrow_inner {
-  margin-top: -6px;
+  border-right-color: #fff;
   margin-left: -5px;
-  border-right-color: #FFF;
+  margin-top: -6px;
 }
 #tiptip_holder.tip_left #tiptip_arrow_inner {
-  margin-top: -6px;
+  border-left-color: #fff;
   margin-left: -7px;
-  border-left-color: #FFF;
+  margin-top: -6px;
 }
 #tiptip_content ul{ list-style: none;
-  padding: 5px 10px;
-  margin: 0;
   font-size: 11px;
+  margin: 0;
+  padding: 5px 10px;
 }
 #tiptip_content a {
   text-decoration: underline;
 }
 #tiptip_content .tooltip_summary {
-  text-align: right;
   padding: 0;
+  text-align: right;
 }
 
 /* tooltip loader styles */
 .tooltip_loader {
-  width: 16px;
   height: 16px;
   padding: 8px 8px;
+  width: 16px;
 }
 .tooltip_loader div {
   background: url("ajax-loader.gif") no-repeat;
+  height: 16px;
   width: 16px;
-  height: 16px;}
+}

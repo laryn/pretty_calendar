@@ -11,5 +11,9 @@
 ?>
 
 <div class="rbc_week">
-  <?php foreach ($days as $day) { print $day; } ?>
+<?php
+  foreach ($days as $day) :
+    print $day;
+  endforeach;
+?>
 </div>
