@@ -1,4 +1,4 @@
 name = Russian Beauty Calendar
-description = Simple nice календарь module that displays the materials by date.
+description = Simple nice calendar module that displays the materials by date.
 version = VERSION
 core = 7.x

@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Theme implementation to display week line.
  * That file useful when you need to show numbers of week.
  *
@@ -10,5 +11,5 @@
 ?>
 
 <div class="rbc_week">
-  <?php foreach ($days as $day) print $day; ?>
+  <?php foreach ($days as $day) { print $day; } ?>
 </div>

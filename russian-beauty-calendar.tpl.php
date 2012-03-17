@@ -1,9 +1,11 @@
 <?php
 /**
+ * @file
  * Theme implementation to display calendar block.
  *
  * Variables:
- * - $daynames: The array of day names (By default starts from monday: $daynames[0] => 'Mon').
+ * - $daynames: The array of day names
+ *              By default starts from monday: $daynames[0] => 'Mon'
  * - $content: Rendered weeks.
  * - $month_name: Selected month name
  * - $month_prev: Previous month time (Unix)
@@ -34,5 +36,3 @@
     </div>
   </div>
 </div>
-
-

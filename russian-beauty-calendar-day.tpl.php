@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Theme implementation to display day cell.
  *
  * Variables:
@@ -13,8 +14,8 @@
  */
 ?>
 
-<?php if($is_empty) $class .= ' blank'; ?>
+<?php if ($is_empty) { $class .= ' blank'; } ?>
 
-<?php if ($count > 0) print '<a class="tooltip" title="'.russian_beauty_calendar_plural($count). '"' . ($using_tooltip ? ' rel="'.$date.'"' : '' ) . ' href="/calendar/'.$date.'">'; ?>
-  <div class="<?php print $class; ?>"><div class="rbc_value"><?php print $number; ?></div></div>
-<?php if($count > 0) print '</a>'; ?>
+<?php if ($count > 0) { print '<a class="tooltip" title="' . russian_beauty_calendar_plural($count) . '"' . ($using_tooltip ? ' rel="' . $date . '"' : '') . ' href="/calendar/' . $date . '">'; } ?>
+<div class="<?php print $class; ?>"><div class="rbc_value"><?php print $number; ?></div></div>
+<?php if ($count > 0) { print '</a>'; } ?>
