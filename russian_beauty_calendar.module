@@ -197,11 +197,10 @@ function russian_beauty_calendar_block_configure($delta = '') {
     '#default_value' => variable_get('russian_beauty_calendar_node_per_page', '20'),
   );
   $form['russian_beauty_calendar_preload_tooltips'] = array(
-    '#type' => 'select',
-    '#options' => array('+' => t('Yes'), '-' => t('No')),
+    '#type' => 'radios',
+    '#options' => array('+' => t('Display links to nodes by day.'), '-' => t('Display the amount of nodes by day.')),
     '#title' => t('Tooltip type'),
     '#default_value' => variable_get('russian_beauty_calendar_preload_tooltips', '-'),
-    '#description' => t('Select how to display tooltips. If you specify "No", then tooltip will display the amount of nodes to date. Otherwise, a tooltip will display links to nodes.'),
   );
   $form['russian_beauty_calendar_tooltip_count'] = array(
     '#type' => 'select',
@@ -416,7 +415,7 @@ function russian_beauty_calendar_content_loader($arg) {
   header('Content-Type: text/html; charset=utf-8');
   $arg = (int) $arg;
   print russian_beauty_calendar_block_content($arg);
-  exit;
+  drupal_exit();
 }
 
 /**
@@ -431,7 +430,7 @@ function russian_beauty_calendar_links_loader($russian_beauty_calendar_year, $ru
   $result = russian_beauty_calendar_select_nodes($date, TRUE);
   if (count($result) == 0) {
     print 'Error';
-    exit;
+    drupal_exit();
   }
 
   $tooltip_count = variable_get('russian_beauty_calendar_tooltip_count', '5');
@@ -450,7 +449,7 @@ function russian_beauty_calendar_links_loader($russian_beauty_calendar_year, $ru
     print '<p class="tooltip_summary">' . l(t('more') . ' ' . russian_beauty_calendar_plural($more_links), "calendar/$russian_beauty_calendar_year/$russian_beauty_calendar_month/$russian_beauty_calendar_day") .  '</p>';
   }
 
-  exit;
+  drupal_exit();
 }
 
 /**
