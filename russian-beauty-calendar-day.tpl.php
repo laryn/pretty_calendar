@@ -15,9 +15,20 @@
 ?>
 
 <?php if ($count > 0) : ?>
-<a class="tooltip" title="<?php print russian_beauty_calendar_plural($count); ?>" href="/calendar/<?php print $date; ?>"<?php print ($using_tooltip ? ' rel="' . $date . '"' : ''); ?>>
+<a class="tooltip" title="<?php
+  print russian_beauty_calendar_plural($count);
+?>" href="<?php
+  global $base_path;
+  print $base_path;
+?>calendar/<?php
+  print $date;
+?>"<?php 
+  print ($using_tooltip ? ' rel="' . $date . '"' : '');
+?>>
 <?php endif; ?>
-<div class="<?php print $class . ($is_empty ? ' blank' : ''); ?>"><div class="rbc_value"><?php print $number; ?></div></div>
+  <div class="<?php print $class . ($is_empty ? ' blank' : ''); ?>">
+    <div class="rbc_value"><?php print $number; ?></div>
+  </div>
 <?php if ($count > 0) : ?>
 </a>
 <?php endif; ?>

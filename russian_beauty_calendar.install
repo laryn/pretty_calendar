@@ -23,6 +23,13 @@ function russian_beauty_calendar_install() {
  * Implements hook_uninstall().
  */
 function russian_beauty_calendar_uninstall() {
-  db_query("DELETE FROM {variable} WHERE name LIKE 'russian_beauty_calendar_%'");
+  variable_del('russian_beauty_calendar_theme');
+  variable_del('russian_beauty_calendar_node_type');
+  variable_del('russian_beauty_calendar_field_date');
+  variable_del('russian_beauty_calendar_title_words');
+  variable_del('russian_beauty_calendar_node_per_page');
+  variable_del('russian_beauty_calendar_preload_tooltips');
+  variable_del('russian_beauty_calendar_tooltip_count');
+  variable_del('russian_beauty_calendar_separate_languages');
   cache_clear_all('variables', 'cache');
 }

@@ -160,7 +160,7 @@ function russian_beauty_calendar_block_configure($delta = '') {
 
   $date_module = module_exists('date');
   if ($date_module) {
-    $field_desc = 'Select field that contains the date of the event. By default, nodes will be selected by date of creation.';
+    $field_desc = t('Select field that contains the date of the event. By default, nodes will be selected by date of creation.');
     foreach ($fields as $field_type => $field_data) {
       if ($field_data['module'] == 'date') {
         $fields_options[$field_type] = $field_type;
@@ -198,7 +198,10 @@ function russian_beauty_calendar_block_configure($delta = '') {
   );
   $form['russian_beauty_calendar_preload_tooltips'] = array(
     '#type' => 'radios',
-    '#options' => array('+' => t('Display links to nodes by day.'), '-' => t('Display the amount of nodes by day.')),
+    '#options' => array(
+      '+' => t('Display links to nodes by day.'),
+      '-' => t('Display the amount of nodes by day.'),
+    ),
     '#title' => t('Tooltip type'),
     '#default_value' => variable_get('russian_beauty_calendar_preload_tooltips', '-'),
   );
@@ -264,21 +267,35 @@ function russian_beauty_calendar_block_view($delta = '') {
   }
 
   $block['subject'] = t('Calendar');
-  $block['content'] = '<div id="calendar-body">' . russian_beauty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y)) . '</div>';
+  $block['content'] = '<div id="calendar-body">' .
+    russian_beauty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y)) .
+    '</div>';
   return $block;
 }
 
 /**
  * Rendering calendar block content.
+ *
+ * @param $month
+ *   Timestamp of selected month.
+ *
+ * @return string
+ *   Rendered block content.
  */
 function russian_beauty_calendar_block_content($month) {
   global $language;
 
+  // Format month array.
+  // Get month timestamp.
   $month = mktime(0, 0, 0, date('m', $month), 1, date('Y', $month));
+  // Get number of days in the given month.
   $dayofmonth = date('t', $month);
   $day_count = 1;
   $num = 0;
+  // Fill first week.
+  // Days of previous month in beginning of the week will be skipped.
   for ($i = 0; $i < 7; $i++) {
+    // Get mumeric representation of the day of the week.
     $dayofweek = date('w', mktime(0, 0, 0, date('m', $month), $day_count, date('Y', $month)));
     $dayofweek = $dayofweek - 1;
     if ($dayofweek == -1) {
@@ -289,9 +306,10 @@ function russian_beauty_calendar_block_content($month) {
       $day_count++;
     }
     else {
-      $week[$num][$i] = "";
+      $week[$num][$i] = ""; // Leave blank value of the day in previous month.
     }
   }
+  // Fill other weeks.
   while (TRUE) {
     $num++;
     for ($i = 0; $i < 7; $i++) {
@@ -305,16 +323,14 @@ function russian_beauty_calendar_block_content($month) {
       break;
     }
   }
-  $day_nids = array();
-  for ($i = 1; $i < 32; $i++) {
-    $day_nids[$i] = 0;
-  }
 
+  // Get names of the days.
   $daynames = array();
   for ($i = 1; $i <= 7; $i++) {
     $daynames[] = format_date(mktime(0, 0, 0, 1, $i, 2001), 'custom', 'D', NULL, $language->language);
   }
 
+  // Get month name.
   $month_name = '';
   if ($language->language == 'ru') {
     $ru_months = array(
@@ -341,9 +357,16 @@ function russian_beauty_calendar_block_content($month) {
 
   $field_name = variable_get('russian_beauty_calendar_field_date', '');
   $node_type = variable_get('russian_beauty_calendar_node_type', '');
+  $use_tooltips = variable_get('russian_beauty_calendar_preload_tooltips', '-');
+  $use_tooltips = $use_tooltips == '-' ? FALSE : TRUE;
 
   $output = '';
 
+  // Get all nides for selected month.
+  $day_nids = array();
+  for ($i = 1; $i < 32; $i++) {
+    $day_nids[$i] = 0;
+  }
   $nids = russian_beauty_calendar_select_month_nodes($month);
   if (isset($nids['error'])) {
     $output .= '<center><span style="color:red">' . t('database error') . '</span></center>';
@@ -363,11 +386,13 @@ function russian_beauty_calendar_block_content($month) {
     }
   }
 
+  // Format theme array.
   $days = array();
   for ($i = 0; $i < count($week); $i++) {
     for ($j = 0; $j < 7; $j++) {
       $day = !empty($week[$i][$j]) ? $week[$i][$j] : '';
       $cls = '';
+      // Define cell classes.
       if ($j > 4) {
         $cls = 'rbc_weekend';
       }
@@ -381,14 +406,18 @@ function russian_beauty_calendar_block_content($month) {
         $cls .= ' rbc_today';
       }
 
-      $days_date = !empty($day) ? (date('Y', $month) . '/' . date('m', $month) . '/' . ($day > 9 ? $day : '0' . $day)) : '';
+      // YYYY/MM/DD format for links.
+      $days_date = '';
+      if (!empty($day)) {
+        $days_date = date('Y/m', $month) . '/' . ($day > 9 ? $day : '0' . $day);
+      }
       $days[] = theme('russian_beauty_calendar_day', array(
         'number' => $day,
         'date' => $days_date,
         'delta' => $j + 1,
         'class' => $cls,
         'count' => !empty($day) ? $day_nids[$day] : 0,
-        'using_tooltip' => variable_get('russian_beauty_calendar_preload_tooltips', '-') == '-' ? FALSE : TRUE,
+        'using_tooltip' => $use_tooltips,
         'is_empty' => empty($day),
       ));
     }
@@ -410,23 +439,38 @@ function russian_beauty_calendar_block_content($month) {
 
 /**
  * AJAX response for calendar navigation.
+ *
+ * @param $month
+ *   Timestamp of selected month.
+ *
+ * @return string
+ *   Rendered block content.
  */
-function russian_beauty_calendar_content_loader($arg) {
+function russian_beauty_calendar_content_loader($month) {
   header('Content-Type: text/html; charset=utf-8');
-  $arg = (int) $arg;
-  print russian_beauty_calendar_block_content($arg);
+  print russian_beauty_calendar_block_content((int) $month);
   drupal_exit();
 }
 
 /**
  * AJAX response for preloading node links.
+ *
+ * @param $year
+ *   Selected year in "YYYY" format.
+ *
+ * @param $month
+ *   Selected month in "MM" format.
+ *
+ * @param $day
+ *   Selected day in "DD" format.
+ *
+ * @return string
+ *   Rendered list of links.
  */
-function russian_beauty_calendar_links_loader($russian_beauty_calendar_year, $russian_beauty_calendar_month, $russian_beauty_calendar_day) {
+function russian_beauty_calendar_links_loader($year, $month, $day) {
   header('Content-Type: text/html; charset=utf-8');
 
-  $irussian_beauty_calendar_year = (int) $russian_beauty_calendar_year; $irussian_beauty_calendar_month = (int) $russian_beauty_calendar_month; $irussian_beauty_calendar_day = (int) $russian_beauty_calendar_day;
-  $date = mktime(0, 0, 0, $irussian_beauty_calendar_month, $irussian_beauty_calendar_day, $irussian_beauty_calendar_year);
-
+  $date = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
   $result = russian_beauty_calendar_select_nodes($date, TRUE);
   if (count($result) == 0) {
     print 'Error';
@@ -446,7 +490,10 @@ function russian_beauty_calendar_links_loader($russian_beauty_calendar_year, $ru
   print '</ul>';
   $more_links = count($result) - $tooltip_count;
   if ($more_links > 0) {
-    print '<p class="tooltip_summary">' . l(t('more') . ' ' . russian_beauty_calendar_plural($more_links), "calendar/$russian_beauty_calendar_year/$russian_beauty_calendar_month/$russian_beauty_calendar_day") .  '</p>';
+    $links = russian_beauty_calendar_plural($more_links);
+    print '<p class="tooltip_summary">' .
+      l(t('more') . ' ' . $links, "calendar/$year/$month/$day") .
+      '</p>';
   }
 
   drupal_exit();
@@ -454,6 +501,12 @@ function russian_beauty_calendar_links_loader($russian_beauty_calendar_year, $ru
 
 /**
  * Extended plural values.
+ *
+ * @param $count
+ *   Number.
+ *
+ * @return string
+ *   Formatted plural value. For example, "17 events".
  */
 function russian_beauty_calendar_plural($count) {
   $words = explode(',', variable_get('russian_beauty_calendar_title_words', t('story,stories')));
@@ -484,6 +537,15 @@ function russian_beauty_calendar_plural($count) {
 
 /**
  * Select nodes for selected date.
+ *
+ * @param $date
+ *   Date timestamp.
+ *
+ * @param $links_only
+ *   Boolean value. If "TRUE", returned result will be contain pager element.
+ *
+ * @return array or query result
+ *   By dependency of $links_only value, result will be array or query result.
  */
 function russian_beauty_calendar_select_nodes($date = 0, $links_only = FALSE) {
   global $language;
@@ -546,6 +608,12 @@ function russian_beauty_calendar_select_nodes($date = 0, $links_only = FALSE) {
 
 /**
  * Select all month nodes.
+ *
+ * @param $date
+ *   Timestamp of selected month.
+ *
+ * @return array
+ *   Nids array for the given month.
  */
 function russian_beauty_calendar_select_month_nodes($date = 0) {
   global $language;
@@ -604,21 +672,31 @@ function russian_beauty_calendar_select_month_nodes($date = 0) {
 }
 
 /**
- * Select day nodes.
+ * Display page with selected day nodes.
+ *
+ * @param $year
+ *   Selected year in "YYYY" format.
+ *
+ * @param $month
+ *   Selected month in "MM" format.
+ *
+ * @param $day
+ *   Selected day in "DD" format.
+ *
+ * @return string
+ *   Rendered page content.
  */
-function russian_beauty_calendar_day_nodes($russian_beauty_calendar_year, $russian_beauty_calendar_month, $russian_beauty_calendar_day) {
+function russian_beauty_calendar_day_nodes($year, $month, $day) {
   global $language;
 
-  $russian_beauty_calendar_year = (int) $russian_beauty_calendar_year; $russian_beauty_calendar_month = (int) $russian_beauty_calendar_month; $russian_beauty_calendar_day = (int) $russian_beauty_calendar_day;
-  $date = mktime(0, 0, 0, $russian_beauty_calendar_month, $russian_beauty_calendar_day, $russian_beauty_calendar_year);
-
-  $build = '';
+  $date = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
+  $output = '';
   if ($date) {
-    $build .= '<h3>' . format_date($date, 'custom', 'd F Y', NULL, $language->language) . '</h3>';
+    $output .= '<h3>' . format_date($date, 'custom', 'd F Y', NULL, $language->language) . '</h3>';
   }
-  $build .= russian_beauty_calendar_node_list($date);
+  $output .= russian_beauty_calendar_node_list($date);
 
-  return $build;
+  return $output;
 }
 
 /**
@@ -629,7 +707,13 @@ function russian_beauty_calendar_full() {
 }
 
 /**
- * Display nodes by date.
+ * Display page with nodes by date.
+ *
+ * @param $date
+ *   Timestamp of selected month.
+ *
+ * @return string
+ *   Rendered page content.
  */
 function russian_beauty_calendar_node_list($date = 0) {
   $nids = russian_beauty_calendar_select_nodes($date);
@@ -647,5 +731,4 @@ function russian_beauty_calendar_node_list($date = 0) {
   }
 
   return drupal_render($build);
-
 }
