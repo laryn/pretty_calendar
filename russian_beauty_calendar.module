@@ -276,7 +276,7 @@ function russian_beauty_calendar_block_view($delta = '') {
 /**
  * Rendering calendar block content.
  *
- * @param $month
+ * @param int $month
  *   Timestamp of selected month.
  *
  * @return string
@@ -306,7 +306,8 @@ function russian_beauty_calendar_block_content($month) {
       $day_count++;
     }
     else {
-      $week[$num][$i] = ""; // Leave blank value of the day in previous month.
+      // Leave blank value of the day in previous month.
+      $week[$num][$i] = "";
     }
   }
   // Fill other weeks.
@@ -440,7 +441,7 @@ function russian_beauty_calendar_block_content($month) {
 /**
  * AJAX response for calendar navigation.
  *
- * @param $month
+ * @param int $month
  *   Timestamp of selected month.
  *
  * @return string
@@ -455,13 +456,13 @@ function russian_beauty_calendar_content_loader($month) {
 /**
  * AJAX response for preloading node links.
  *
- * @param $year
+ * @param int $year
  *   Selected year in "YYYY" format.
  *
- * @param $month
+ * @param int $month
  *   Selected month in "MM" format.
  *
- * @param $day
+ * @param int $day
  *   Selected day in "DD" format.
  *
  * @return string
@@ -502,7 +503,7 @@ function russian_beauty_calendar_links_loader($year, $month, $day) {
 /**
  * Extended plural values.
  *
- * @param $count
+ * @param int $count
  *   Number.
  *
  * @return string
@@ -538,13 +539,13 @@ function russian_beauty_calendar_plural($count) {
 /**
  * Select nodes for selected date.
  *
- * @param $date
+ * @param int $date
  *   Date timestamp.
  *
- * @param $links_only
+ * @param bool $links_only
  *   Boolean value. If "TRUE", returned result will be contain pager element.
  *
- * @return array or query result
+ * @return array|DatabaseStatementInterface
  *   By dependency of $links_only value, result will be array or query result.
  */
 function russian_beauty_calendar_select_nodes($date = 0, $links_only = FALSE) {
@@ -609,7 +610,7 @@ function russian_beauty_calendar_select_nodes($date = 0, $links_only = FALSE) {
 /**
  * Select all month nodes.
  *
- * @param $date
+ * @param int $date
  *   Timestamp of selected month.
  *
  * @return array
@@ -674,13 +675,13 @@ function russian_beauty_calendar_select_month_nodes($date = 0) {
 /**
  * Display page with selected day nodes.
  *
- * @param $year
+ * @param int $year
  *   Selected year in "YYYY" format.
  *
- * @param $month
+ * @param int $month
  *   Selected month in "MM" format.
  *
- * @param $day
+ * @param int $day
  *   Selected day in "DD" format.
  *
  * @return string
@@ -709,7 +710,7 @@ function russian_beauty_calendar_full() {
 /**
  * Display page with nodes by date.
  *
- * @param $date
+ * @param int $date
  *   Timestamp of selected month.
  *
  * @return string
