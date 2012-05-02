@@ -153,6 +153,11 @@ function russian_beauty_calendar_block_configure($delta = '') {
     '#default_value' => explode(',', variable_get('russian_beauty_calendar_node_type', '')),
     '#description' => t('Select node type. Hold down the CTRL key to select multiple node types.'),
   );
+  $form['russian_beauty_calendar_node_invert'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Invert selection.'),
+    '#default_value' => variable_get('russian_beauty_calendar_node_invert', FALSE),
+  );
 
   // Search date fields.
   $fields = field_info_fields();
@@ -228,6 +233,7 @@ function russian_beauty_calendar_block_configure($delta = '') {
 function russian_beauty_calendar_block_save($delta = '', $edit = array()) {
   variable_set('russian_beauty_calendar_theme', $edit['russian_beauty_calendar_theme']);
   variable_set('russian_beauty_calendar_node_type', implode(",", $edit['russian_beauty_calendar_node_type']));
+  variable_set('russian_beauty_calendar_node_invert', $edit['russian_beauty_calendar_node_invert']);
   variable_set('russian_beauty_calendar_field_date', $edit['russian_beauty_calendar_field_date']);
   variable_set('russian_beauty_calendar_node_per_page', $edit['russian_beauty_calendar_node_per_page']);
   variable_set('russian_beauty_calendar_title_words', $edit['russian_beauty_calendar_title_words']);
@@ -582,11 +588,12 @@ function russian_beauty_calendar_select_nodes($date = 0, $links_only = FALSE) {
   }
   // Check types.
   if ($node_types[0] != '') {
-    $or = db_or();
-    foreach ($node_types as $node_type) {
-      $or = $or->condition('n.type', $node_type);
+    if (variable_get('russian_beauty_calendar_node_invert', FALSE)) {
+      $select->condition('n.type', $node_types, 'NOT IN');
     }
-    $select->condition($or);
+    else {
+      $select->condition('n.type', $node_types, 'IN');
+    }
   }
   $select->orderBy('n.sticky', 'DESC')
     ->orderBy('n.created', 'DESC');
@@ -650,11 +657,12 @@ function russian_beauty_calendar_select_month_nodes($date = 0) {
   }
   // Check types.
   if ($node_types[0] != '') {
-    $or = db_or();
-    foreach ($node_types as $node_type) {
-      $or = $or->condition('n.type', $node_type);
+    if (variable_get('russian_beauty_calendar_node_invert', FALSE)) {
+      $select->condition('n.type', $node_types, 'NOT IN');
     }
-    $select->condition($or);
+    else {
+      $select->condition('n.type', $node_types, 'IN');
+    }
   }
   $select->addTag('node_access');
 

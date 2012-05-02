@@ -11,6 +11,7 @@
 function russian_beauty_calendar_install() {
   variable_set('russian_beauty_calendar_theme', 'round');
   variable_set('russian_beauty_calendar_node_type', '');
+  variable_set('russian_beauty_calendar_node_invert', FALSE);
   variable_set('russian_beauty_calendar_field_date', '');
   variable_set('russian_beauty_calendar_title_words', 'story,stories');
   variable_set('russian_beauty_calendar_node_per_page', '20');
@@ -25,6 +26,7 @@ function russian_beauty_calendar_install() {
 function russian_beauty_calendar_uninstall() {
   variable_del('russian_beauty_calendar_theme');
   variable_del('russian_beauty_calendar_node_type');
+  variable_del('russian_beauty_calendar_node_invert');
   variable_del('russian_beauty_calendar_field_date');
   variable_del('russian_beauty_calendar_title_words');
   variable_del('russian_beauty_calendar_node_per_page');
