@@ -11,14 +11,20 @@
  * - $count: Node counter
  * - $using_tooltip: Using tooltips (boolean)
  * - $is_empty: Blank cell (boolean)
+ * - $is_clean_url: Clean URL (boolean)
+ *
+ * Note:
+ *   We can use l() function to generate a link, but in that case,
+ *   the resulting code is very difficult to read.
  */
 ?>
 
 <?php if ($count > 0) : ?>
 <a class="tooltip" title="<?php
-  print russian_beauty_calendar_plural($count);
+  print pretty_calendar_plural($count);
 ?>" href="<?php
   global $base_path;
+  print $is_clean_url ? '' : '/q?=';
   print $base_path;
 ?>calendar/<?php
   print $date;

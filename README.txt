@@ -6,7 +6,7 @@ This module creates new block "Calendar" and new pages "/calendar/YYYY/MM/DD"
 to display all nodes per day.
 
 Settings can be found on block configure page
-(admin/structure/block/manage/russian_beauty_calendar/calendar/configure).
+(admin/structure/block/manage/pretty_calendar/calendar/configure).
 
 Calendar theme
  - Gridy (width - 182px)
