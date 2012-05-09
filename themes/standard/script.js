@@ -6,7 +6,7 @@ function calendar_go(dir) {
       $("#calendar-body").append(data);
       $(".tooltip").tipTip({defaultPosition: "right", maxWidth: "400px", keepAlive:true});
       // cut 3rd letter
-      $("#calendar-body .rbc_daynames .rbc_value").each(function(){$(this).html($(this).html().substr(0,2));});
+      $("#calendar-body .calendar-daynames .calendar-value").each(function(){$(this).html($(this).html().substr(0,2));});
     });
   })(jQuery);
 }
@@ -102,7 +102,7 @@ function calendar_go(dir) {
   Drupal.behaviors.initRussianBeautyCalendar = {
     attach : function() {
       $(".tooltip").tipTip({defaultPosition: "right", maxWidth: "400px", keepAlive:true});
-      $("#calendar-body .rbc_daynames .rbc_value").each(function(){$(this).html($(this).html().substr(0,2));});
+      $("#calendar-body .calendar-daynames .calendar-value").each(function(){$(this).html($(this).html().substr(0,2));});
     }
   }
 })(jQuery);

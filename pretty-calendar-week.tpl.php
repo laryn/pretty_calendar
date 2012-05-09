@@ -10,7 +10,7 @@
  */
 ?>
 
-<div class="rbc_week">
+<div class="pretty-calendar-week">
 <?php
   foreach ($days as $day) :
     print $day;

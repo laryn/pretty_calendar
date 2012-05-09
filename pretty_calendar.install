@@ -9,15 +9,6 @@
  * Implements hook_install().
  */
 function pretty_calendar_install() {
-  variable_set('pretty_calendar_theme', 'round');
-  variable_set('pretty_calendar_node_type', '');
-  variable_set('pretty_calendar_node_invert', FALSE);
-  variable_set('pretty_calendar_field_date', '');
-  variable_set('pretty_calendar_title_words', 'story,stories');
-  variable_set('pretty_calendar_node_per_page', '20');
-  variable_set('pretty_calendar_preload_tooltips', '-');
-  variable_set('pretty_calendar_tooltip_count', '5');
-  variable_set('pretty_calendar_separate_languages', FALSE);
 }
 
 /**

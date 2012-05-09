@@ -10,59 +10,34 @@
  */
 function pretty_calendar_menu() {
   $items = array();
-  $items['calendar/%pretty_calendar_year/%pretty_calendar_month/%pretty_calendar_day'] = array(
+  $items['calendar/%/%/%'] = array(
     'title' => 'All activities for the day',
     'page callback' => 'pretty_calendar_day_nodes',
     'page arguments' => array(1, 2, 3),
-    'access callback' => 'user_access',
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
   );
-  $items['calendar_get/%pretty_calendar_day'] = array(
+  $items['calendar_get/%'] = array(
     'title' => 'Calendar',
     'page callback' => 'pretty_calendar_content_loader',
     'page arguments' => array(1),
-    'access callback' => 'user_access',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['calendar_links/%pretty_calendar_year/%pretty_calendar_month/%pretty_calendar_day'] = array(
+  $items['calendar_links/%/%/%'] = array(
     'title' => 'Calendar',
     'page callback' => 'pretty_calendar_links_loader',
     'page arguments' => array(1, 2, 3),
-    'access callback' => 'user_access',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
   $items['calendar'] = array(
     'title' => 'Calendar',
     'page callback' => 'pretty_calendar_full',
-    'access callback' => 'user_access',
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
   );
   return $items;
-}
-
-/**
- * Year argument for calendar page.
- */
-function pretty_calendar_year_to_arg($arg) {
-  return empty($arg) ? date("Y") : $arg;
-}
-
-/**
- * Month argument for calendar page.
- */
-function pretty_calendar_month_to_arg($arg) {
-  return empty($arg) ? date("m") : $arg;
-}
-
-/**
- * Day argument for calendar page.
- */
-function pretty_calendar_day_to_arg($arg) {
-  return empty($arg) ? date("d") : $arg;
 }
 
 /**
@@ -97,7 +72,6 @@ function pretty_calendar_theme() {
         'count' => NULL,
         'using_tooltip' => NULL,
         'is_empty' => NULL,
-        'is_clean_url' => variable_get('clean_url'),
       ),
     ),
   );
@@ -147,12 +121,12 @@ function pretty_calendar_block_configure($delta = '') {
   );
 
   $form['pretty_calendar_node_type'] = array(
-    '#type' => 'select',
+    '#type' => 'checkboxes',
     '#options' => $node_type_options,
     '#multiple' => TRUE,
     '#title' => t('Node type'),
     '#default_value' => explode(',', variable_get('pretty_calendar_node_type', '')),
-    '#description' => t('Select node type. Hold down the CTRL key to select multiple node types.'),
+    '#description' => t('Select node type.'),
   );
   $form['pretty_calendar_node_invert'] = array(
     '#type' => 'checkbox',
@@ -193,8 +167,8 @@ function pretty_calendar_block_configure($delta = '') {
     '#size' => 64,
     '#maxlength' => 64,
     '#title' => t('Event headings'),
-    '#default_value' => variable_get('pretty_calendar_title_words', t('story,stories')),
-    '#description' => t('Choose a name for the events that will be displayed in the calendar when mouse hover on date. For example, "12 events". Enter a comma-separated words for numbers (for example, "event, events, events").'),
+    '#default_value' => variable_get('pretty_calendar_title_words', 'story,stories'),
+    '#description' => t('Choose a name for the events that will be displayed in the calendar when mouse hover on date. For example, "12 events". Enter a comma-separated words for numbers (for example, "event, events").'),
   );
   $form['pretty_calendar_node_per_page'] = array(
     '#type' => 'select',
@@ -338,31 +312,8 @@ function pretty_calendar_block_content($month) {
     $daynames[] = format_date(mktime(0, 0, 0, 1, $i, 2001), 'custom', 'D', NULL, $language->language);
   }
 
-  // Get month name.
-  $month_name = '';
-  if ($language->language == 'ru') {
-    $ru_months = array(
-      '01' => 'Январь',
-      '02' => 'Февраль',
-      '03' => 'Март',
-      '04' => 'Апрель',
-      '05' => 'Май',
-      '06' => 'Июнь',
-      '07' => 'Июль',
-      '08' => 'Август',
-      '09' => 'Сентябрь',
-      '10' => 'Октябрь',
-      '11' => 'Ноябрь',
-      '12' => 'Декабрь',
-    );
-    $month_name = $ru_months[date('m', $month)];
-  }
-  else {
-    $month_name = format_date($month, 'custom', 'F', NULL, $language->language);
-  }
-  $month_name .= ' ' . date('Y', $month);
-
-
+  // Get month name. Add context to t() for extended translation.
+  $month_name = t(format_date($month, 'custom', 'F', NULL, 'en'), array(), array('context' => 'Nominative')) . ' ' . date('Y', $month);
   $field_name = variable_get('pretty_calendar_field_date', '');
   $node_type = variable_get('pretty_calendar_node_type', '');
   $use_tooltips = variable_get('pretty_calendar_preload_tooltips', '-');
@@ -402,16 +353,16 @@ function pretty_calendar_block_content($month) {
       $cls = '';
       // Define cell classes.
       if ($j > 4) {
-        $cls = 'rbc_weekend';
+        $cls = 'pretty-calendar-weekend';
       }
       else {
-        $cls = 'rbc_day';
+        $cls = 'pretty-calendar-day';
       }
       if ($j == 6) {
-        $cls .= ' rbc_last';
+        $cls .= ' pretty-calendar-last';
       }
       if ($day == date('d') && date('m.Y') == date('m.Y', $month)) {
-        $cls .= ' rbc_today';
+        $cls .= ' pretty-calendar-today';
       }
 
       // YYYY/MM/DD format for links.
@@ -509,6 +460,9 @@ function pretty_calendar_links_loader($year, $month, $day) {
 
 /**
  * Extended plural values.
+ * To translate names we should set some values or leave "story,stories'.
+ * Then we can use "1 story", "@count stories", "@count[2] stories" on
+ * "/admin/config/regional/translate/translate" page.
  *
  * @param int $count
  *   Number.
@@ -517,30 +471,11 @@ function pretty_calendar_links_loader($year, $month, $day) {
  *   Formatted plural value. For example, "17 events".
  */
 function pretty_calendar_plural($count) {
-  $words = explode(',', variable_get('pretty_calendar_title_words', t('story,stories')));
+  $words = explode(',', variable_get('pretty_calendar_title_words', 'story,stories'));
   if (!isset($words[0]) || !isset($words[1])) {
-    $words = explode(',', t('story,stories'));
+    $words = explode(',', 'story,stories');
   }
-  if (!isset($words[2])) {
-    // Third array element used for correct russian plural values.
-    $words[2] = $words[1];
-  }
-
-  $remainder = (int) $count;
-  if ($remainder > 20) {
-    $remainder %= 10;
-  }
-  if ($remainder == 1) {
-    $form = $words[0];
-  }
-  elseif ($remainder > 1 && $remainder < 5) {
-    $form = $words[1];
-  }
-  else {
-    $form = $words[2];
-  }
-
-  return $count . ' '  . $form;
+  return format_plural($count, '1 ' . $words[0], '@count ' . $words[1]);
 }
 
 /**

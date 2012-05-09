@@ -13,8 +13,8 @@
   margin: 0;
   padding: 0;
 }
-.rbc_week,
-.rbc_daynames {
+.pretty-calendar-week,
+.calendar-daynames {
   font-size: 12px;
   height: 22px;
   margin: 0;
@@ -23,10 +23,10 @@
   white-space: nowrap;
   width: 100%;
 }
-.rbc_week .rbc_weekend,
-.rbc_week .rbc_day,
-.rbc_daynames .rbc_weekend,
-.rbc_daynames .rbc_day {
+.pretty-calendar-week .pretty-calendar-weekend,
+.pretty-calendar-week .pretty-calendar-day,
+.calendar-daynames .pretty-calendar-weekend,
+.calendar-daynames .pretty-calendar-day {
   display: inline;
   float: left;
   height: 22px;
@@ -34,13 +34,13 @@
   text-align: center;
   width: 14%;
 }
-.rbc_week .rbc_weekend,
-.rbc_daynames .rbc_weekend {
+.pretty-calendar-week .pretty-calendar-weekend,
+.calendar-daynames .pretty-calendar-weekend {
   color: #06c;
   width: 15%;
 }
-.rbc_week .rbc_value,
-.rbc_daynames .rbc_value {
+.pretty-calendar-week .calendar-value,
+.calendar-daynames .calendar-value {
   border: 1px solid #eee;
   float: left;
   height: 20px;
@@ -48,44 +48,44 @@
   text-align: center;
   width: 100%;
 }
-.rbc_week a {
+.pretty-calendar-week a {
   color: #000;
   font-weight: bold;
 }
-.rbc_week a div {
+.pretty-calendar-week a div {
   background-color: #dee4da;
   text-decoration: underline;
 }
-.rbc_week a:hover div {
+.pretty-calendar-week a:hover div {
   background-color: #06c;
   color: #fff;
 }
-.rbc_week .rbc_today {
+.pretty-calendar-week .pretty-calendar-today {
   color: #d03;
 }
-.rbc_daynames {
+.calendar-daynames {
   border-bottom: 3px solid #ccc;
   text-transform: uppercase;
 }
 
-.rbc_month {
+.pretty-calendar-month {
   border-top: 3px solid #ccc;
   height: 24px;
 }
-.rbc_month a div {
+.pretty-calendar-month a div {
   text-decoration: none;
 }
-.rbc_month {
+.pretty-calendar-month {
   font-weight: bold;
   padding-top: 2px;
   text-align: center;
   width: 100%;
 }
-.rbc_month .month-title {
+.pretty-calendar-month .month-title {
   padding-top: 2px;
 }
-.rbc_month .calendar-prev,
-.rbc_month .calendar-next {
+.pretty-calendar-month .calendar-prev,
+.pretty-calendar-month .calendar-next {
   border: none;
   height: 18px;
   line-height: 18px;
@@ -94,24 +94,24 @@
   position: absolute;
   width: 24px;
 }
-.rbc_month .calendar-prev {
+.pretty-calendar-month .calendar-prev {
   bottom: 2px;
   left: 2px;
 }
-.rbc_month .calendar-next {
+.pretty-calendar-month .calendar-next {
   bottom: 2px;
   right: 2px;
 }
-.rbc_month a .calendar-prev {
+.pretty-calendar-month a .calendar-prev {
   background: transparent url("arrows.png") no-repeat -24px 0;
 }
-.rbc_month a:hover .calendar-prev {
+.pretty-calendar-month a:hover .calendar-prev {
   background: transparent url("arrows.png") no-repeat 0 0;
 }
-.rbc_month a .calendar-next {
+.pretty-calendar-month a .calendar-next {
   background: transparent url("arrows.png") no-repeat -24px -18px;
 }
-.rbc_month a:hover .calendar-next {
+.pretty-calendar-month a:hover .calendar-next {
   background: transparent url("arrows.png") no-repeat 0 -18px;
 }
 

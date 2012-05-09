@@ -24,31 +24,31 @@
 #calendar-body {
   position: relative;
 }
-.rbc_week {
+.pretty-calendar-week {
   clear: both;
   float: left;
   width: 168px;
 }
-.rbc_week .rbc_value {
+.pretty-calendar-week .calendar-value {
   cursor: default;
 }
-.rbc_week .rbc_value {
+.pretty-calendar-week .calendar-value {
   color: #999;
 }
-.rbc_day,
-.rbc_weekend {
+.pretty-calendar-day,
+.pretty-calendar-weekend {
   clear: none;
   float: left;
 }
 
-.rbc_month {
+.pretty-calendar-month {
   clear: both;
   float: none;
   position: absolute;
   top: -3px;
   width: 168px;
 }
-.rbc_month .month-title {
+.pretty-calendar-month .month-title {
   float: left;
   font-weight: bold;
   line-height: 12px;
@@ -57,47 +57,47 @@
   text-align: center;
   width: 138px;
 }
-.rbc_month a .rbc_value {
+.pretty-calendar-month a .calendar-value {
   color: #000;
   cursor: pointer;
   font-weight: bold;
 }
-.rbc_month .calendar-prev,
-.rbc_month .calendar-next {
+.pretty-calendar-month .calendar-prev,
+.pretty-calendar-month .calendar-next {
   background: transparent url("arrows.gif") no-repeat 4px 0;
   cursor: pointer;
   height: 12px;
   width: 10px;
 }
-.rbc_month .calendar-prev {
+.pretty-calendar-month .calendar-prev {
   float: left;
   margin: 2px 0 0 5px;
 }
-.rbc_month a:hover .calendar-prev {
+.pretty-calendar-month a:hover .calendar-prev {
   background: url("arrows.gif") no-repeat 4px -12px;
   text-decoration: none;
 }
-.rbc_month .calendar-next {
+.pretty-calendar-month .calendar-next {
   background: url("arrows.gif") no-repeat 0px -24px;
   float: right;
   margin: 2px 5px 0 0;
 }
-.rbc_month a:hover .calendar-next {
+.pretty-calendar-month a:hover .calendar-next {
   background: url("arrows.gif") no-repeat 0px -36px;
   text-decoration: none;
 }
 
-.rbc_daynames {
+.calendar-daynames {
   border-bottom: 1px solid #f5f5f5;
   border-top: 1px solid #f5f5f5;
   float: left;
   padding: 2px 0;
 }
-.rbc_daynames .rbc_value {
+.calendar-daynames .calendar-value {
   font-size: 11px!important;
   text-transform: capitalize;
 }
-#calendar-body  .rbc_value {
+#calendar-body  .calendar-value {
   display: block;
   float: left;
   height: 15px;
@@ -107,18 +107,18 @@
   text-align: center;
   width: 24px;
 }
-.rbc_week a div {
+.pretty-calendar-week a div {
   background: url("day.gif") no-repeat 0 -48px;
 }
-.rbc_week a:hover div {
+.pretty-calendar-week a:hover div {
   background: url("day.gif") no-repeat 0 0;
   color: #06c;
 }
-.rbc_week .rbc_today div {
+.pretty-calendar-week .pretty-calendar-today div {
   background: url("day.gif") no-repeat 0 -16px;
   color: #06c;
 }
-.rbc_week .rbc_today div:hover {
+.pretty-calendar-week .pretty-calendar-today div:hover {
   background: url("day.gif") no-repeat 0 -32px;
   color: #000;
 }

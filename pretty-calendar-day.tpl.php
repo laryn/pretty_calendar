@@ -11,7 +11,6 @@
  * - $count: Node counter
  * - $using_tooltip: Using tooltips (boolean)
  * - $is_empty: Blank cell (boolean)
- * - $is_clean_url: Clean URL (boolean)
  *
  * Note:
  *   We can use l() function to generate a link, but in that case,
@@ -24,7 +23,7 @@
   print pretty_calendar_plural($count);
 ?>" href="<?php
   global $base_path;
-  print $is_clean_url ? '' : '/q?=';
+  print variable_get('clean_url') ? '' : '/q?=';
   print $base_path;
 ?>calendar/<?php
   print $date;
@@ -33,7 +32,7 @@
 ?>>
 <?php endif; ?>
   <div class="<?php print $class . ($is_empty ? ' blank' : ''); ?>">
-    <div class="rbc_value"><?php print $number; ?></div>
+    <div class="calendar-value"><?php print $number; ?></div>
   </div>
 <?php if ($count > 0) : ?>
 </a>
