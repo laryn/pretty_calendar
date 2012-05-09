@@ -33,7 +33,7 @@ function pretty_calendar_menu() {
   );
   $items['calendar'] = array(
     'title' => 'Calendar',
-    'page callback' => 'pretty_calendar_full',
+    'page callback' => 'pretty_calendar_node_list',
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
   );
@@ -642,13 +642,6 @@ function pretty_calendar_day_nodes($year, $month, $day) {
   $output .= pretty_calendar_node_list($date);
 
   return $output;
-}
-
-/**
- * Display full calendar.
- */
-function pretty_calendar_full() {
-  return pretty_calendar_node_list();
 }
 
 /**
