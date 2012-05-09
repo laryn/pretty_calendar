@@ -644,6 +644,7 @@ function pretty_calendar_day_nodes($year, $month, $day) {
   return $output;
 }
 
+
 /**
  * Display page with nodes by date.
  *
