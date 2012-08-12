@@ -36,6 +36,7 @@ function pretty_calendar_menu() {
     'page callback' => 'pretty_calendar_node_list',
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
+    'weight' => -50,
   );
   return $items;
 }
@@ -221,10 +222,7 @@ function pretty_calendar_block_save($delta = '', $edit = array()) {
  * Implements hook_block_view().
  */
 function pretty_calendar_block_view($delta = '') {
-
   $theme = variable_get('pretty_calendar_theme', 'round');
-  drupal_add_css(drupal_get_path('module', 'pretty_calendar') . '/themes/' . $theme . '/calendar.css');
-  drupal_add_js(drupal_get_path('module', 'pretty_calendar') . '/themes/' . $theme . '/script.js');
 
   $m = date('m');
   $y = date('Y');
@@ -247,10 +245,17 @@ function pretty_calendar_block_view($delta = '') {
     }
   }
 
+  $path = drupal_get_path('module', 'pretty_calendar') . '/themes/' . $theme;
   $block['subject'] = t('Calendar');
-  $block['content'] = '<div id="calendar-body">' .
-    pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y)) .
-    '</div>';
+  $block['content'] = array(
+    '#markup' => '<div id="calendar-body">'
+      . pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y))
+      . '</div>',
+    '#attached' => array(
+      'js' => array($path . '/script.js'),
+      'css' => array($path . '/calendar.css'),
+    ),
+  );
   return $block;
 }
 
@@ -643,7 +648,6 @@ function pretty_calendar_day_nodes($year, $month, $day) {
 
   return $output;
 }
-
 
 /**
  * Display page with nodes by date.
