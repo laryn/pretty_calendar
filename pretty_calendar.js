@@ -1,7 +1,7 @@
 function calendar_go(dir) {
   (function ($) {
     $("#calendar-body").html("<div class='calendar_loader'><div></div></div>" + $("#calendar-body").html());
-    $.get(Drupal.settings.basePath + "calendar_get/" + $(".calendar-"+dir).parent().attr("rel"), function(data){
+    $.get(Drupal.settings.basePath + "calendar_get/" + $(".calendar-" + dir).parent().attr("rel"), function(data){
       $("#calendar-body").html(" ");
       $("#calendar-body").append(data);
       $(".tooltip").tipTip({defaultPosition: "right", maxWidth: "400px", keepAlive:true});
@@ -64,7 +64,7 @@ function calendar_go(dir) {
           } else if((left_compare && w_compare < 0) || (t_class == "_left" && !right_compare)){
             t_class = "_left";
             arrow_top = Math.round(tip_h - 13) / 2;
-            arrow_left =  Math.round(tip_w);
+            arrow_left = Math.round(tip_w);
             marg_left = Math.round(left - (tip_w + opts.edgeOffset + 5));
             marg_top = Math.round(top + h_compare);
           }
