@@ -93,7 +93,8 @@
   float: left;
   padding: 2px 0;
 }
-.calendar-daynames .calendar-value {
+.calendar-daynames .calendar-value,
+.calendar-daynames .calendar-value span {
   font-size: 11px!important;
   text-transform: capitalize;
 }
@@ -223,10 +224,16 @@
   margin: 0;
   padding: 5px 10px;
 }
+#tiptip_content ul li {
+  margin: 0;
+  padding: 0;
+}
 #tiptip_content a {
   text-decoration: underline;
 }
 #tiptip_content .tooltip_summary {
+  border-top: 1px dotted #bbb;
+  margin: 0.4em 0.2em;
   padding: 0;
   text-align: right;
 }

@@ -97,7 +97,7 @@ function pretty_calendar_block_configure($delta = '') {
     '#size' => 128,
     '#maxlength' => 128,
     '#title' => t('Calendar page title'),
-    '#default_value' => variable_get('pretty_calendar_page_title', 'Activities calendar'),
+    '#default_value' => variable_get('pretty_calendar_page_title', t('Activities calendar')),
     '#description' => t('Choose a title for page that will display all calendar nodes.'),
   );
 
@@ -112,11 +112,10 @@ function pretty_calendar_block_configure($delta = '') {
   $themes = array();
   $theme_path = drupal_get_path('module', 'pretty_calendar') . '/themes/';
   if ($handle = opendir($theme_path)) {
-    // Check for directory, calendar.css and script.js.
+    // Check for directory, calendar.css.
     while (FALSE !== ($dir = readdir($handle))) {
       if (is_dir($theme_path . $dir) &&
-        file_exists($theme_path . $dir . '/calendar.css') &&
-        file_exists($theme_path . $dir . '/script.js')) {
+        file_exists($theme_path . $dir . '/calendar.css')) {
         $themes[$dir] = $dir;
       }
     }
@@ -177,7 +176,7 @@ function pretty_calendar_block_configure($delta = '') {
     '#size' => 64,
     '#maxlength' => 64,
     '#title' => t('Event headings'),
-    '#default_value' => variable_get('pretty_calendar_title_words', 'story,stories'),
+    '#default_value' => variable_get('pretty_calendar_title_words', t('story,stories')),
     '#description' => t('Choose a name for the events that will be displayed in the calendar when mouse hover on date. For example, "12 events". Enter a comma-separated words for numbers (for example, "event, events").'),
   );
   $form['pretty_calendar_node_per_page'] = array(
@@ -206,7 +205,7 @@ function pretty_calendar_block_configure($delta = '') {
     '#type' => 'checkbox',
     '#title' => t('Separate nodes by language'),
     '#default_value' => variable_get('pretty_calendar_separate_languages', FALSE),
-    '#description' => t('If checked nodes will be selected in the language ​in which they were created.'),
+    '#description' => t('If checked nodes will be selected in the language in which they were created.'),
   );
 
   return $form;
@@ -256,15 +255,15 @@ function pretty_calendar_block_view($delta = '') {
     }
   }
 
-  $path = drupal_get_path('module', 'pretty_calendar') . '/themes/' . $theme;
+  $path = drupal_get_path('module', 'pretty_calendar');
   $block['subject'] = t('Calendar');
   $block['content'] = array(
     '#markup' => '<div id="calendar-body">'
     . pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y))
     . '</div>',
     '#attached' => array(
-      'js' => array($path . '/script.js'),
-      'css' => array($path . '/calendar.css'),
+      'js' => array($path . '/pretty_calendar.js'),
+      'css' => array($path . '/themes/' . $theme . '/calendar.css'),
     ),
   );
   return $block;
@@ -454,20 +453,20 @@ function pretty_calendar_links_loader($year, $month, $day) {
 
   $tooltip_count = variable_get('pretty_calendar_tooltip_count', '5');
   $counter = 0;
-  print '<ul>';
+  $list = array();
   foreach ($result as $row) {
-    print '<li>' . l($row->title, 'node/' . $row->nid) . '</li>';
+    $list['items'][] = l($row->title, 'node/' . $row->nid);
     $counter++;
     if ($counter >= $tooltip_count) {
       break;
     }
   }
-  print '</ul>';
+  print theme('item_list', $list);
   $more_links = count($result) - $tooltip_count;
   if ($more_links > 0) {
     $links = pretty_calendar_plural($more_links);
     print '<p class="tooltip_summary">' .
-      l(t('more') . ' ' . $links, "calendar/$year/$month/$day") .
+      l(t('more @count', array('@count' => $links)), "calendar/$year/$month/$day") .
       '</p>';
   }
 
@@ -477,19 +476,18 @@ function pretty_calendar_links_loader($year, $month, $day) {
 /**
  * Extended plural values.
  *
+ * To translate names we should set some values or leave "story,stories'.
+ * Then we can use "1 story", "@count stories", "@count[2] stories" on
+ * "/admin/config/regional/translate/translate" page.
+ *
  * @param int $count
  *   Number.
  *
  * @return string
  *   Formatted plural value. For example, "17 events".
- *
- * @comment
- * To translate names we should set some values or leave "story,stories'.
- * Then we can use "1 story", "@count stories", "@count[2] stories" on
- * "/admin/config/regional/translate/translate" page.
  */
 function pretty_calendar_plural($count) {
-  $words = explode(',', variable_get('pretty_calendar_title_words', 'story,stories'));
+  $words = explode(',', variable_get('pretty_calendar_title_words', t('story,stories')));
   if (!isset($words[0]) || !isset($words[1])) {
     $words = explode(',', 'story,stories');
   }
@@ -680,7 +678,7 @@ function pretty_calendar_node_list($date = 0) {
       '#theme' => 'pager',
       '#weight' => 5,
     );
-    drupal_set_title(variable_get('pretty_calendar_page_title', 'Activities calendar'));
+    drupal_set_title(variable_get('pretty_calendar_page_title', t('Activities calendar')));
   }
   else {
     drupal_set_title(t('No activities was found'));
