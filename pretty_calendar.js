@@ -1,7 +1,7 @@
 function calendar_go(dir) {
   (function ($) {
     $("#calendar-body").html("<div class='calendar_loader'><div></div></div>" + $("#calendar-body").html());
-    $.get(Drupal.settings.basePath+"calendar_get/"+$(".calendar-"+dir).parent().attr("rel"), function(data){
+    $.get(Drupal.settings.basePath + "calendar_get/" + $(".calendar-"+dir).parent().attr("rel"), function(data){
       $("#calendar-body").html(" ");
       $("#calendar-body").append(data);
       $(".tooltip").tipTip({defaultPosition: "right", maxWidth: "400px", keepAlive:true});
@@ -26,7 +26,7 @@ function calendar_go(dir) {
      var opts = $.extend(defaults, options);
      if($("#tiptip_holder").length <= 0){
       var request = null;
-       var tiptip_holder = $('<div id="tiptip_holder" style="max-width:'+ opts.maxWidth +';"></div>');
+       var tiptip_holder = $('<div id="tiptip_holder" style="max-width:' + opts.maxWidth + ';"></div>');
       var tiptip_content = $('<div id="tiptip_content"></div>');
       var tiptip_arrow = $('<div id="tiptip_arrow"></div>');
       $("body").append(tiptip_holder.html(tiptip_content).prepend(tiptip_arrow.html('<div id="tiptip_arrow_inner"></div>')));
@@ -71,25 +71,25 @@ function calendar_go(dir) {
           var top_compare = (top + org_height + opts.edgeOffset + tip_h + 8) > parseInt($(window).height() + $(window).scrollTop());
           var bottom_compare = ((top + org_height) - (opts.edgeOffset + tip_h + 8)) < 0;
           if(top_compare || (t_class == "_bottom" && top_compare) || (t_class == "_top" && !bottom_compare)){
-            if(t_class == "_top" || t_class == "_bottom"){ t_class = "_top"; } else { t_class = t_class+"_top"; }
+            if(t_class == "_top" || t_class == "_bottom"){ t_class = "_top"; } else { t_class = t_class + "_top"; }
             arrow_top = tip_h;
             marg_top = Math.round(top - (tip_h + 5 + opts.edgeOffset));
           } else if(bottom_compare | (t_class == "_top" && bottom_compare) || (t_class == "_bottom" && !top_compare)){
-            if(t_class == "_top" || t_class == "_bottom"){ t_class = "_bottom"; } else { t_class = t_class+"_bottom"; }
+            if(t_class == "_top" || t_class == "_bottom"){ t_class = "_bottom"; } else { t_class = t_class + "_bottom"; }
             arrow_top = -12;
             marg_top = Math.round(top + org_height + opts.edgeOffset);
           }
           if(t_class == "_right_top" || t_class == "_left_top"){ marg_top = marg_top + 5; } else if(t_class == "_right_bottom" || t_class == "_left_bottom"){ marg_top = marg_top - 5; }
           if(t_class == "_left_top" || t_class == "_left_bottom"){ marg_left = marg_left + 5; }
-          tiptip_arrow.css({"margin-left": arrow_left+"px", "margin-top": arrow_top+"px"});
-          tiptip_holder.css({"margin-left": marg_left+"px", "margin-top": marg_top+"px"}).attr("class","tip"+t_class);
+          tiptip_arrow.css({"margin-left": arrow_left + "px", "margin-top": arrow_top + "px"});
+          tiptip_holder.css({"margin-left": marg_left + "px", "margin-top": marg_top + "px"}).attr("class","tip" + t_class);
         }
         function active_tiptip(){
           if (request != null) { request.abort(); }
           opts.enter.call(this);
           if (par_elem.attr('rel') != "" && par_elem.attr('rel') != undefined) {
             tiptip_content.html("<div class='tooltip_loader'><div></div></div>");
-            request = $.get(Drupal.settings.basePath+"calendar_links/"+par_elem.attr('rel'), function(data){ tiptip_content.html(" "); tiptip_content.append(data); place_tiptip(); });
+            request = $.get(Drupal.settings.basePath + "calendar_links/" + par_elem.attr('rel'), function(data){ tiptip_content.html(" "); tiptip_content.append(data); place_tiptip(); });
           } else { tiptip_content.html(org_title); }
           tiptip_holder.hide().removeAttr("class").css("margin","0");
           place_tiptip();
