@@ -23,7 +23,7 @@
   print pretty_calendar_plural($count);
 ?>" href="<?php
   global $base_path;
-  print variable_get('clean_url') ? '' : '/q?=';
+  print variable_get('clean_url') ? '' : '/?q=';
   print $base_path;
 ?>calendar/<?php
   print $date;

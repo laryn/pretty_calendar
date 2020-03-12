@@ -9,16 +9,16 @@
  * Implements hook_uninstall().
  */
 function pretty_calendar_uninstall() {
-  config_clear('pretty_calendar.settings', 'pretty_calendar_theme');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_node_type');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_node_invert');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_field_date');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_title_words');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_node_per_page');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_page_title');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_preload_tooltips');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_tooltip_count');
-  config_clear('pretty_calendar.settings', 'pretty_calendar_separate_languages');
+  config_clear('pretty_calendar.settings', 'theme');
+  config_clear('pretty_calendar.settings', 'node_type');
+  config_clear('pretty_calendar.settings', 'node_invert');
+  config_clear('pretty_calendar.settings', 'field_date');
+  config_clear('pretty_calendar.settings', 'title_words');
+  config_clear('pretty_calendar.settings', 'node_per_page');
+  config_clear('pretty_calendar.settings', 'page_title');
+  config_clear('pretty_calendar.settings', 'preload_tooltips');
+  config_clear('pretty_calendar.settings', 'tooltip_count');
+  config_clear('pretty_calendar.settings', 'separate_languages');
   cache_clear_all('variables', 'cache');
 }
 
@@ -27,16 +27,16 @@ function pretty_calendar_uninstall() {
  */
 function pretty_calendar_update_1000() {
   $config = config('pretty_calendar.settings');
-  $config->set('pretty_calendar_page_title', update_variable_get('pretty_calendar_page_title', 'dynamic value in file /pretty_calendar/pretty_calendar.module line 681'));
-  $config->set('pretty_calendar_theme', update_variable_get('pretty_calendar_theme', 'round'));
-  $config->set('pretty_calendar_node_type', update_variable_get('pretty_calendar_node_type', ''));
-  $config->set('pretty_calendar_node_invert', update_variable_get('pretty_calendar_node_invert', 'FALSE'));
-  $config->set('pretty_calendar_field_date', update_variable_get('pretty_calendar_field_date', ''));
-  $config->set('pretty_calendar_title_words', update_variable_get('pretty_calendar_title_words', 'dynamic value in file /pretty_calendar/pretty_calendar.module line 490'));
-  $config->set('pretty_calendar_node_per_page', update_variable_get('pretty_calendar_node_per_page', '20'));
-  $config->set('pretty_calendar_preload_tooltips', update_variable_get('pretty_calendar_preload_tooltips', '-'));
-  $config->set('pretty_calendar_tooltip_count', update_variable_get('pretty_calendar_tooltip_count', '5'));
-  $config->set('pretty_calendar_separate_languages', update_variable_get('pretty_calendar_separate_languages', 'FALSE'));
+  $config->set('page_title', update_variable_get('pretty_calendar_page_title', 'Calendar'));
+  $config->set('theme', update_variable_get('pretty_calendar_theme', 'round'));
+  $config->set('node_type', update_variable_get('pretty_calendar_node_type', ''));
+  $config->set('node_invert', update_variable_get('pretty_calendar_node_invert', 'FALSE'));
+  $config->set('field_date', update_variable_get('pretty_calendar_field_date', ''));
+  $config->set('title_words', update_variable_get('pretty_calendar_title_words', 'event,events'));
+  $config->set('node_per_page', update_variable_get('pretty_calendar_node_per_page', '20'));
+  $config->set('preload_tooltips', update_variable_get('pretty_calendar_preload_tooltips', '-'));
+  $config->set('tooltip_count', update_variable_get('pretty_calendar_tooltip_count', '5'));
+  $config->set('separate_languages', update_variable_get('pretty_calendar_separate_languages', 'FALSE'));
   update_variable_del('pretty_calendar_page_title');
   update_variable_del('pretty_calendar_theme');
   update_variable_del('pretty_calendar_node_type');
@@ -53,7 +53,5 @@ function pretty_calendar_update_1000() {
  * Implements hook_install().
  */
 function pretty_calendar_install() {
-  // Dynamically generated variable data was detected.
-  // /pretty_calendar/pretty_calendar.module line 681
-  // /pretty_calendar/pretty_calendar.module line 490
+
 }

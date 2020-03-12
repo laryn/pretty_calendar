@@ -16,7 +16,6 @@
 .pretty-calendar-week,
 .calendar-daynames {
   font-size: 12px;
-  height: 22px;
   margin: 0;
   overflow: hidden;
   padding: 0px;
@@ -29,7 +28,6 @@
 .calendar-daynames .pretty-calendar-day {
   display: inline;
   float: left;
-  height: 22px;
   overflow: visible;
   text-align: center;
   width: 14%;
@@ -43,7 +41,6 @@
 .calendar-daynames .calendar-value {
   border: 1px solid #eee;
   float: left;
-  height: 20px;
   padding: 2px 0 0;
   text-align: center;
   width: 100%;
@@ -73,7 +70,6 @@
 
 .pretty-calendar-month {
   border-top: 3px solid #ccc;
-  height: 24px;
 }
 .pretty-calendar-month a div {
   text-decoration: none;
@@ -90,7 +86,6 @@
 .pretty-calendar-month .calendar-prev,
 .pretty-calendar-month .calendar-next {
   border: none;
-  height: 18px;
   line-height: 18px;
   margin: 2px 0;
   padding: 0;

@@ -2,8 +2,8 @@
 .block-calendar {
   background: transparent url("background.png") no-repeat top center;
   min-height: 130px;
-  padding: 15px;
-  width: 168px;
+  padding: 15px 15px 30px 15px;
+  width: 192px;
 }
 /*IE6 hack */
 *html .block-calendar {
@@ -19,7 +19,7 @@
   height: 114px;
   padding-top: 16px;
   position: relative;
-  width: 168px;
+  width: 192px;
 }
 #calendar-body {
   position: relative;
@@ -27,7 +27,7 @@
 .pretty-calendar-week {
   clear: both;
   float: left;
-  width: 168px;
+  width: 192px;
 }
 .pretty-calendar-week .calendar-value {
   cursor: default;
