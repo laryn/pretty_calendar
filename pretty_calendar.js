@@ -1,7 +1,7 @@
 function calendar_go(dir) {
   (function ($) {
     $("#calendar-body").html("<div class='calendar_loader'><div></div></div>" + $("#calendar-body").html());
-    $.get(Drupal.settings.basePath + "calendar_get/" + $(".calendar-" + dir).parent().attr("rel"), function(data){
+    $.get(Backdrop.settings.basePath + "calendar_get/" + $(".calendar-" + dir).parent().attr("rel"), function(data){
       $("#calendar-body").html(" ");
       $("#calendar-body").append(data);
       $(".tooltip").tipTip({defaultPosition: "right", maxWidth: "400px", keepAlive:true});
@@ -89,7 +89,7 @@ function calendar_go(dir) {
           opts.enter.call(this);
           if (par_elem.attr('rel') != "" && par_elem.attr('rel') != undefined) {
             tiptip_content.html("<div class='tooltip_loader'><div></div></div>");
-            request = $.get(Drupal.settings.basePath + "calendar_links/" + par_elem.attr('rel'), function(data){ tiptip_content.html(" "); tiptip_content.append(data); place_tiptip(); });
+            request = $.get(Backdrop.settings.basePath + "calendar_links/" + par_elem.attr('rel'), function(data){ tiptip_content.html(" "); tiptip_content.append(data); place_tiptip(); });
           } else { tiptip_content.html(org_title); }
           tiptip_holder.hide().removeAttr("class").css("margin","0");
           place_tiptip();
@@ -100,7 +100,7 @@ function calendar_go(dir) {
       }
     });
   }
-  Drupal.behaviors.initRussianBeautyCalendar = {
+  Backdrop.behaviors.initRussianBeautyCalendar = {
     attach : function() {
       $(".tooltip").tipTip({defaultPosition: "right", maxWidth: "400px", keepAlive:true});
       $("#calendar-body .calendar-daynames .calendar-value").each(function(){

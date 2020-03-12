@@ -1,0 +1,13 @@
+{
+    "_config_name": "pretty_calendar.settings",
+    "pretty_calendar_page_title": "dynamic value in file /pretty_calendar/pretty_calendar.module line 681",
+    "pretty_calendar_theme": "round",
+    "pretty_calendar_node_type": "",
+    "pretty_calendar_node_invert": "FALSE",
+    "pretty_calendar_field_date": "",
+    "pretty_calendar_title_words": "dynamic value in file /pretty_calendar/pretty_calendar.module line 490",
+    "pretty_calendar_node_per_page": "20",
+    "pretty_calendar_preload_tooltips": "-",
+    "pretty_calendar_tooltip_count": "5",
+    "pretty_calendar_separate_languages": "FALSE"
+}
