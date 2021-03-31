@@ -190,19 +190,19 @@ function pretty_calendar_block_configure($delta = '') {
     '#maxlength' => 64,
     '#title' => t('Event headings'),
     '#default_value' => $config->get('title_words'),
-    '#description' => t('Choose a name for the events that will be displayed in the calendar when mouse hover on date. For example, "12 events". Enter a comma-separated words for numbers (for example, "event, events").'),
+    '#description' => t('Choose a name for the events that will be displayed when hovering on a date. For example, "12 events". Enter comma-separated words for plurals (for example, "event, events").'),
   );
   $form['node_per_page'] = array(
     '#type' => 'select',
     '#options' => backdrop_map_assoc(array(5, 10, 15, 20, 25, 30, 40, 50, 80, 100)),
-    '#title' => t('Number of nodes per page'),
+    '#title' => t('Number of items per page'),
     '#default_value' => $config->get('node_per_page'),
   );
   $form['preload_tooltips'] = array(
     '#type' => 'radios',
     '#options' => array(
-      '+' => t('Display links to nodes by day.'),
-      '-' => t('Display the amount of nodes by day.'),
+      '+' => t('Display links to events'),
+      '-' => t('Display the count of events'),
     ),
     '#title' => t('Tooltip type'),
     '#default_value' => $config->get('preload_tooltips'),
@@ -212,7 +212,12 @@ function pretty_calendar_block_configure($delta = '') {
     '#options' => backdrop_map_assoc(array(1, 2, 3, 4, 5, 8, 10, 15, 20)),
     '#title' => t('Number of links in the tooltip'),
     '#default_value' => $config->get('tooltip_count'),
-    '#description' => t('Specify the number of links in the tooltip (if links display selected for tooltip display type).'),
+    '#description' => t('Specify the number of links in the tooltip.'),
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="block_settings[preload_tooltips]"]' => array('value' => '-'),
+      ),
+    ),
   );
   $form['separate_languages'] = array(
     '#type' => 'checkbox',
