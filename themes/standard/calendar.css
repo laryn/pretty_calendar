@@ -93,11 +93,11 @@
   width: 24px;
 }
 .pretty-calendar-month .calendar-prev {
-  bottom: 2px;
+  top: 2px;
   left: 2px;
 }
 .pretty-calendar-month .calendar-next {
-  bottom: 2px;
+  top: 2px;
   right: 2px;
 }
 .pretty-calendar-month a .calendar-prev {

@@ -122,24 +122,19 @@ function pretty_calendar_block_configure($delta = '') {
   }
 
   // Search themes.
-  $themes = array();
-  $theme_path = backdrop_get_path('module', 'pretty_calendar') . '/themes/';
-  if ($handle = opendir($theme_path)) {
-    // Check for directory, calendar.css.
-    while (FALSE !== ($dir = readdir($handle))) {
-      if (is_dir($theme_path . $dir) &&
-        file_exists($theme_path . $dir . '/calendar.css')) {
-        $themes[$dir] = $dir;
-      }
-    }
-    closedir($handle);
-  }
+  $themes = array(
+    'basis' => 'Basis for Backdrop',
+    'standard' => 'Standard (legacy)',
+    'round' => 'Rounded (legacy)',
+    'vista_198' => 'Vista 198px (legacy)',
+    'gridy_182' => 'Gridy 182px (legacy)',
+  );
   $form['theme'] = array(
     '#type' => 'select',
     '#options' => $themes,
     '#title' => t('Theme'),
     '#default_value' => $config->get('theme'),
-    '#description' => t('Select calendar appearance.'),
+    '#description' => t('Select calendar appearance'),
   );
 
   $form['node_type'] = array(
@@ -363,7 +358,7 @@ function pretty_calendar_block_content($month) {
   }
   $nids = pretty_calendar_select_month_nodes($month);
   if (isset($nids['error'])) {
-    $output .= '<center><span style="color:red">' . t('database error') . '</span></center>';
+    $output .= '<div class="messages error">' . t('database error') . '</div>';
   }
   else {
     foreach ($nids as $row) {
