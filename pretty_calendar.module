@@ -281,7 +281,7 @@ function pretty_calendar_block_view($delta = '') {
     . pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y))
     . '</div>',
     '#attached' => array(
-      'js' => array($path . '/pretty_calendar.js'),
+      'js' => array($path . '/js/pretty_calendar.js'),
       'css' => array($path . '/themes/' . $theme . '/calendar.css'),
     ),
   );
