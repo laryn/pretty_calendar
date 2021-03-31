@@ -94,9 +94,10 @@ function pretty_calendar_block_info() {
  */
 function pretty_calendar_config_info() {
   $prefixes['pretty_calendar.settings'] = array(
-    'label' => t('Module name settings'),
+    'label' => t('Pretty Calendar settings'),
     'group' => t('Configuration'),
   );
+  return $prefixes;
 }
 
 /**
