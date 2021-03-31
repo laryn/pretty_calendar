@@ -2,7 +2,7 @@
 /**
  * @file
  * Theme implementation to display week line.
- * That file useful when you need to show numbers of week.
+ * This file is useful when you need to show week numbers, for example.
  *
  * Variables:
  * - $days: The array of day cells.
@@ -12,8 +12,8 @@
 
 <div class="pretty-calendar-week">
 <?php
-  foreach ($days as $day) :
+  foreach ($days as $day) {
     print $day;
-  endforeach;
+  }
 ?>
 </div>

@@ -16,24 +16,29 @@
  *   We can use l() function to generate a link, but in that case,
  *   the resulting code is very difficult to read.
  */
-?>
 
-<?php if ($count > 0) : ?>
-<a class="tooltip" title="<?php
-  print pretty_calendar_plural($count);
-?>" href="<?php
-  global $base_path;
-  print variable_get('clean_url') ? '' : '/?q=';
-  print $base_path;
-?>calendar/<?php
-  print $date;
-?>"<?php 
-  print ($using_tooltip ? ' rel="' . $date . '"' : '');
-?>>
-<?php endif; ?>
-  <div class="<?php print $class . ($is_empty ? ' blank' : ''); ?>">
-    <div class="calendar-value"><?php print $number; ?></div>
-  </div>
-<?php if ($count > 0) : ?>
-</a>
-<?php endif; ?>
+ if ($count > 0) {
+  $link_title = pretty_calendar_plural($count);
+  $link_path = 'calendar/' . $date;
+  $link_rel = ($using_tooltip) ? $date : '';
+  $link_cell = TRUE;
+ }
+ else {
+   $class .= ' blank';
+   $link_cell = FALSE;
+ }
+
+ $cell = '<div class="' . $class . '"><div class="calendar-value">' . $number . '</div></div>';
+ if ($link_cell) {
+   $rendered_cell = l($cell, $link_path, array(
+     'html' => TRUE,
+     'attributes' => array(
+      'title' => $link_title,
+      'rel' => $link_rel,
+     ),
+   ));
+ }
+ else {
+   $rendered_cell = $cell;
+ }
+ print $rendered_cell;
