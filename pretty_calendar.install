@@ -6,24 +6,7 @@
  */
 
 /**
- * Implements hook_uninstall().
- */
-function pretty_calendar_uninstall() {
-  config_clear('pretty_calendar.settings', 'theme');
-  config_clear('pretty_calendar.settings', 'node_type');
-  config_clear('pretty_calendar.settings', 'node_invert');
-  config_clear('pretty_calendar.settings', 'field_date');
-  config_clear('pretty_calendar.settings', 'title_words');
-  config_clear('pretty_calendar.settings', 'node_per_page');
-  config_clear('pretty_calendar.settings', 'page_title');
-  config_clear('pretty_calendar.settings', 'preload_tooltips');
-  config_clear('pretty_calendar.settings', 'tooltip_count');
-  config_clear('pretty_calendar.settings', 'separate_languages');
-  cache_clear_all('variables', 'cache');
-}
-
-/**
- * Implements hook_update_N().
+ * Convert Drupal 7 variables to CMI.
  */
 function pretty_calendar_update_1000() {
   $config = config('pretty_calendar.settings');
@@ -50,8 +33,195 @@ function pretty_calendar_update_1000() {
 }
 
 /**
- * Implements hook_install().
+ * Create the view replacement for the calendar listing.
  */
-function pretty_calendar_install() {
-
+function pretty_calendar_update_1001() {
+  $data = array(
+    "name" => "pretty_calendar",
+    "module" => "pretty_calendar",
+    "description" => "",
+    "tag" => "default",
+    "disabled" => false,
+    "base_table" => "node",
+    "human_name" => "Pretty Calendar",
+    "core" => 1,
+    "display" => array(
+      "default" => array(
+        "display_title" => "Default",
+        "display_plugin" => "default",
+        "display_options" => array(
+          "query" => array(
+            "type" => "views_query",
+            "options" => array(),
+          ),
+          "access" => array(
+            "type" => "perm",
+            "perm" => "access content"
+          ),
+          "cache" => array(
+            "type" => "none"
+          ),
+          "exposed_form" => array(
+            "type" => "basic"
+          ),
+          "pager" => array(
+            "type" => "full",
+            "options" => array(
+              "items_per_page" => "25"
+            ),
+          ),
+          "style_plugin" => "default",
+          "row_plugin" => "node",
+          "fields" => array(
+            "title" => array(
+              "id" => "title",
+              "table" => "node",
+              "field" => "title",
+              "label" => "",
+              "alter" => array(
+                "alter_text" => 0,
+                "make_link" => 0,
+                "absolute" => 0,
+                "trim" => 0,
+                "word_boundary" => 0,
+                "ellipsis" => 0,
+                "strip_tags" => 0,
+                "html" => 0
+              ),
+              "hide_empty" => 0,
+              "empty_zero" => 0,
+              "link_to_node" => 1
+            ),
+          ),
+          "filters" => array(
+            "status" => array(
+              "value" => 1,
+              "table" => "node",
+              "field" => "status",
+              "id" => "status",
+              "expose" => array(
+                "operator" => false
+              ),
+              "group" => 1
+            ),
+            "type" => array(
+              "id" => "type",
+              "table" => "node",
+              "field" => "type",
+              "relationship" => "none",
+              "group_type" => "group",
+              "ui_name" => "",
+              "operator" => "in",
+              "value" => array(
+                "page" => "page",
+                "events" => "events"
+              ),
+              "group" => "1",
+              "exposed" => false,
+              "expose" => array(
+                "operator_id" => false,
+                "label" => "",
+                "description" => "",
+                "use_operator" => false,
+                "operator" => "",
+                "identifier" => "",
+                "required" => false,
+                "remember" => false,
+                "multiple" => false,
+                "remember_roles" => array(
+                  "authenticated" => "authenticated"
+                ),
+                "reduce" => false
+              ),
+              "is_grouped" => false,
+              "group_info" => array(
+                "label" => "",
+                "description" => "",
+                "identifier" => "",
+                "optional" => true,
+                "widget" => "select",
+                "multiple" => false,
+                "remember" => 0,
+                "default_group" => "All",
+                "default_group_multiple" => array(),
+                "group_items" => array(),
+              ),
+            ),
+          ),
+          "sorts" => array(),
+          "title" => "Pretty Calendar listing",
+          "row_options" => array(
+            "build_mode" => "teaser",
+            "title" => true,
+            "links" => true,
+            "comments" => false
+          ),
+          "arguments" => array(
+            "nid" => array(
+              "id" => "nid",
+              "table" => "node",
+              "field" => "nid",
+              "relationship" => "none",
+              "group_type" => "group",
+              "ui_name" => "",
+              "default_action" => "empty",
+              "exception" => array(
+                "value" => "all",
+                "title_enable" => 0,
+                "title" => "All"
+              ),
+              "title_enable" => 0,
+              "title" => "",
+              "breadcrumb_enable" => 0,
+              "breadcrumb" => "",
+              "default_argument_type" => "fixed",
+              "default_argument_options" => array(
+                "argument" => ""
+              ),
+              "default_argument_skip_url" => 0,
+              "summary_options" => array(
+                "base_path" => "",
+                "count" => "1",
+                "items_per_page" => "25",
+                "override" => 0
+              ),
+              "summary" => array(
+                "sort_order" => "asc",
+                "number_of_records" => "0",
+                "format" => "default_summary"
+              ),
+              "specify_validation" => 0,
+              "validate" => array(
+                "type" => "none",
+                "fail" => "not found"
+              ),
+              "validate_options" => array(),
+              "break_phrase" => 1,
+              "not" => 0
+            ),
+          ),
+          "empty" => array(
+            "area" => array(
+              "id" => "area",
+              "table" => "views",
+              "field" => "area",
+              "relationship" => "none",
+              "group_type" => "group",
+              "ui_name" => "",
+              "label" => "",
+              "empty" => true,
+              "content" => "<p>No results for the date specified.</p>\r\n",
+              "format" => "filtered_html",
+              "tokenize" => 0
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+  $config = config('views.view.pretty_calendar');
+  if ($config->isNew()) {
+    $config->setData($data);
+    $config->save();
+  }
 }

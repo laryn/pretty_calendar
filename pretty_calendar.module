@@ -687,19 +687,8 @@ function pretty_calendar_day_nodes($year, $month, $day) {
  *   Rendered page content.
  */
 function pretty_calendar_node_list($date = 0) {
+  backdrop_set_title(config_get('pretty_calendar.settings', 'page_title'));
   $nids = pretty_calendar_select_nodes($date);
-  if (!empty($nids)) {
-    $nodes = node_load_multiple($nids);
-    $build = node_view_multiple($nodes);
-    $build['pager'] = array(
-      '#theme' => 'pager',
-      '#weight' => 5,
-    );
-    backdrop_set_title(config_get('pretty_calendar.settings', 'page_title'));
-  }
-  else {
-    backdrop_set_title(t('No activities was found'));
-  }
 
-  return backdrop_render($build);
+  return views_embed_view('pretty_calendar', 'default', implode('+', $nids));
 }
