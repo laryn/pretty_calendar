@@ -179,6 +179,18 @@ function pretty_calendar_block_configure($delta = '') {
     '#default_value' => $config->get('field_date'),
     '#description' => $field_desc,
   );
+  $system_formats = system_get_date_formats();
+  $format_options = array();
+  foreach ($system_formats as $date_format) {
+    $format_options[$date_format['name']] = $date_format['label'] . ' (' . date($date_format['pattern']) . ')';
+
+  }
+  $form['date_format_listing'] = array(
+    '#type' => 'select',
+    '#options' => $format_options,
+    '#title' => t('Format to use for dates on listings page'),
+    '#default_value' => $config->get('date_format_listing'),
+  );
   $form['upcoming_days'] = array(
     '#type' => 'number',
     '#title' => t('Display additional upcoming days'),
@@ -237,6 +249,7 @@ function pretty_calendar_block_save($delta = '', $edit = array()) {
   $config->set('node_type', implode(",", $edit['node_type']));
   $config->set('node_invert', $edit['node_invert']);
   $config->set('field_date', $edit['field_date']);
+  $config->set('date_format_listing', $edit['date_format_listing']);
   $config->set('upcoming_days', $edit['upcoming_days']);
   $config->set('title_words', $edit['title_words']);
   $config->set('preload_tooltips', $edit['preload_tooltips']);
@@ -670,13 +683,15 @@ function pretty_calendar_select_month_nodes($date = 0) {
 function pretty_calendar_day_nodes($year, $month, $day) {
   global $language;
   $output = '';
-  $upcoming_days = config_get('pretty_calendar.settings', 'upcoming_days');
+  $config = config('pretty_calendar.settings');
+  $upcoming_days = $config->get('upcoming_days');
+  $date_format_listing = $config->get('date_format_listing');
   $count = 0;
   do {
     $date = mktime(0, 0, 0, (int) $month, (int) $day + $count, (int) $year);
     $dateresult = pretty_calendar_node_list($date);
     if ($dateresult) {
-      $output .= '<h3>' . format_date($date, 'custom', 'd F Y', NULL, $language->langcode) . '</h3>';
+      $output .= '<h3>' . format_date($date, $date_format_listing, NULL, NULL, $language->langcode) . '</h3>';
       $output .= $dateresult;
     }
     $count ++;

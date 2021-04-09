@@ -5,6 +5,7 @@
     "node_type": "",
     "node_invert": "FALSE",
     "field_date": "",
+    "date_format_listing": "short",
     "title_words": "event, events",
     "node_per_page": "20",
     "preload_tooltips": "-",

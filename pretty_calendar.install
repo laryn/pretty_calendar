@@ -33,7 +33,7 @@ function pretty_calendar_update_1000() {
 }
 
 /**
- * Create the view replacement for the calendar listing.
+ * Create the view replacement for the calendar listing and update date format for listings.
  */
 function pretty_calendar_update_1001() {
   $data = array(
@@ -224,4 +224,5 @@ function pretty_calendar_update_1001() {
     $config->setData($data);
     $config->save();
   }
+  config_set('pretty_calendar.settings', 'date_format_listing', 'short');
 }
