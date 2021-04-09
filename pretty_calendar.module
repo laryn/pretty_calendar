@@ -674,10 +674,11 @@ function pretty_calendar_day_nodes($year, $month, $day) {
   $count = 0;
   do {
     $date = mktime(0, 0, 0, (int) $month, (int) $day + $count, (int) $year);
-    if ($date) {
+    $dateresult = pretty_calendar_node_list($date);
+    if ($dateresult) {
       $output .= '<h3>' . format_date($date, 'custom', 'd F Y', NULL, $language->langcode) . '</h3>';
+      $output .= $dateresult;
     }
-    $output .= pretty_calendar_node_list($date);
     $count ++;
   } while ($count <= $upcoming_days);
 
