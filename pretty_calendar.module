@@ -179,6 +179,15 @@ function pretty_calendar_block_configure($delta = '') {
     '#default_value' => $config->get('field_date'),
     '#description' => $field_desc,
   );
+  $form['upcoming_days'] = array(
+    '#type' => 'number',
+    '#title' => t('Display additional upcoming days'),
+    '#description' => t('How many additional upcoming days would you like to show underneath the daily listing, if any? (up to 6 additional days to show a full week)'),
+    '#size' => 2,
+    '#min' => 0,
+    '#max' => 6,
+    '#default_value' => $config->get('upcoming_days'),
+  );
   $form['title_words'] = array(
     '#type' => 'textfield',
     '#size' => 64,
@@ -222,15 +231,18 @@ function pretty_calendar_block_configure($delta = '') {
  * Implements hook_block_save().
  */
 function pretty_calendar_block_save($delta = '', $edit = array()) {
-  config_set('pretty_calendar.settings', 'page_title', $edit['page_title']);
-  config_set('pretty_calendar.settings', 'theme', $edit['theme']);
-  config_set('pretty_calendar.settings', 'node_type', implode(",", $edit['node_type']));
-  config_set('pretty_calendar.settings', 'node_invert', $edit['node_invert']);
-  config_set('pretty_calendar.settings', 'field_date', $edit['field_date']);
-  config_set('pretty_calendar.settings', 'title_words', $edit['title_words']);
-  config_set('pretty_calendar.settings', 'preload_tooltips', $edit['preload_tooltips']);
-  config_set('pretty_calendar.settings', 'tooltip_count', $edit['tooltip_count']);
-  config_set('pretty_calendar.settings', 'separate_languages', $edit['separate_languages']);
+  $config = config('pretty_calendar.settings');
+  $config->set('page_title', $edit['page_title']);
+  $config->set('theme', $edit['theme']);
+  $config->set('node_type', implode(",", $edit['node_type']));
+  $config->set('node_invert', $edit['node_invert']);
+  $config->set('field_date', $edit['field_date']);
+  $config->set('upcoming_days', $edit['upcoming_days']);
+  $config->set('title_words', $edit['title_words']);
+  $config->set('preload_tooltips', $edit['preload_tooltips']);
+  $config->set('tooltip_count', $edit['tooltip_count']);
+  $config->set('separate_languages', $edit['separate_languages']);
+  $config->save();
 }
 
 /**
@@ -657,13 +669,17 @@ function pretty_calendar_select_month_nodes($date = 0) {
  */
 function pretty_calendar_day_nodes($year, $month, $day) {
   global $language;
-
-  $date = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
   $output = '';
-  if ($date) {
-    $output .= '<h3>' . format_date($date, 'custom', 'd F Y', NULL, $language->langcode) . '</h3>';
-  }
-  $output .= pretty_calendar_node_list($date);
+  $upcoming_days = config_get('pretty_calendar.settings', 'upcoming_days');
+  $count = 0;
+  do {
+    $date = mktime(0, 0, 0, (int) $month, (int) $day + $count, (int) $year);
+    if ($date) {
+      $output .= '<h3>' . format_date($date, 'custom', 'd F Y', NULL, $language->langcode) . '</h3>';
+    }
+    $output .= pretty_calendar_node_list($date);
+    $count ++;
+  } while ($count <= $upcoming_days);
 
   return $output;
 }
