@@ -560,6 +560,7 @@ function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
   }
   // Check date.
   if ($date > 0) {
+    $timezone_offset = _pretty_calendar_get_timezone_offset();
     if ($field_name == '') {
       $select
         ->condition('created', $date, '>=')
@@ -569,7 +570,7 @@ function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
       $select->distinct();
       $select->leftJoin('field_data_' . $field_name, 'fd', 'fd.entity_id = n.nid');
       $select->fields('fd', array($field_name . '_value'));
-      $select->where('DATE(' . $field_name . '_value) = :date', array(':date' => date('Y.m.d', $date)));
+      $select->where('DATE(ADDTIME(' . $field_name . '_value, SEC_TO_TIME(' . $timezone_offset . '))) = :date', array(':date' => date('Y-m-d', $date)));
     }
   }
   // Check types.
@@ -608,8 +609,8 @@ function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
  *   Nids array for the given month.
  */
 function pretty_calendar_select_month_nodes($date = 0) {
-  $config = config('pretty_calendar.settings');
   global $language;
+  $config = config('pretty_calendar.settings');
   $field_name = $config->get('field_date');
   $node_types = explode(',', $config->get('node_type'));
 
@@ -628,6 +629,7 @@ function pretty_calendar_select_month_nodes($date = 0) {
   }
   // Check date.
   if ($date > 0) {
+    $timezone_offset = _pretty_calendar_get_timezone_offset();
     if ($field_name == '') {
       $select
         ->condition('created', mktime(0, 0, 0, date('m', $date), 1, date('Y', $date)), '>=')
@@ -637,7 +639,7 @@ function pretty_calendar_select_month_nodes($date = 0) {
       $select->distinct();
       $select->leftJoin('field_data_' . $field_name, 'fd', 'fd.entity_id = n.nid');
       $select->fields('fd', array($field_name . '_value'));
-      $select->where('DATE_FORMAT(fd.' . $field_name . '_value, \'%Y%m\') = :stamp', array(':stamp' => date('Ym', $date)));
+      $select->where('DATE_FORMAT(ADDTIME(fd.' . $field_name . '_value, SEC_TO_TIME(' . $timezone_offset . ')), \'%Y%m\') = :stamp', array(':stamp' => date('Ym', $date)));
     }
   }
   // Check types.
@@ -712,6 +714,21 @@ function pretty_calendar_day_nodes($year, $month, $day) {
 function pretty_calendar_node_list($date = 0) {
   backdrop_set_title(config_get('pretty_calendar.settings', 'page_title'));
   $nids = pretty_calendar_select_nodes($date);
-
   return views_embed_view('pretty_calendar', 'default', implode('+', $nids));
+}
+
+/**
+ * * Get server timezone offset from UTC.
+ */
+function _pretty_calendar_get_timezone_offset() {
+  date_default_timezone_set('UTC');
+  $timezone = config_get('system.date', 'default_timezone');
+  $dateTimeZoneUTC = new DateTimeZone("UTC");
+  $dateTimeZoneServer = new DateTimeZone($timezone);
+  $dateTimeUTC = new DateTime("now", $dateTimeZoneUTC);
+  $dateTimeServer = new DateTime("now", $dateTimeZoneServer);
+
+  $timeOffset = $dateTimeZoneServer->getOffset($dateTimeUTC);
+
+  return $timeOffset;
 }
