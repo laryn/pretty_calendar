@@ -157,18 +157,18 @@ function pretty_calendar_block_configure($delta = '') {
 
   $date_module = module_exists('date');
   if ($date_module) {
-    $field_desc = t('Select field that contains the date of the event. By default, nodes will be selected by date of creation.');
+    $field_desc = t('Select the field that contains the date of the event. By default, content will be selected by date created.');
     foreach ($fields as $field_type => $field_data) {
       if ($field_data['module'] == 'date') {
         $fields_options[$field_type] = $field_type;
       }
     }
     if (count($fields_options) == 1) {
-      $field_desc = '<span style="color:red; font-weight:bold;">' . t('There are no custom date fields.') . '</span>';
+      $field_desc = t('There are no custom date fields.');
     }
   }
   else {
-    $field_desc = '<span style="color:red; font-weight:bold;">' . t('The Date module is not enabled.') . '</span>';
+    $field_desc = t('The Date module is not enabled.');
   }
 
   $form['field_date'] = array(
