@@ -43,13 +43,12 @@
   padding: .25rem 0 0;
   text-align: center;
   width: 100%;
-  font-weight: normal;
 }
 .calendar-daynames .calendar-value .third-letter {
   display: none;
 }
 .pretty-calendar-week a {
-  color: #20252E;
+  color: #0073bd;
   font-weight: bold;
 }
 .pretty-calendar-week a div {
