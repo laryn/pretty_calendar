@@ -316,7 +316,7 @@ function pretty_calendar_block_content($month) {
 
   // Format month array.
   // Get month timestamp.
-  $month = mktime(0, 0, 0, date('m', $month), 1, date('Y', $month));
+  $month = mktime(0, 0, 0, date('m', $month), 12, date('Y', $month));
   // Get number of days in the given month.
   $dayofmonth = date('t', $month);
   $day_count = 1;
