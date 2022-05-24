@@ -155,12 +155,12 @@ function pretty_calendar_block_configure($delta = '') {
   $fields = field_info_fields();
   $fields_options[''] = t('Node creation date');
 
-  $date_module = module_exists('date');
+  $date_module = (module_exists('date') || module_exists('repeating_dates'));
   if ($date_module) {
     $field_desc = t('Select the field that contains the date of the event. By default, content will be selected by date created.');
     foreach ($fields as $field_type => $field_data) {
-      if ($field_data['module'] == 'date') {
-        $fields_options[$field_type] = $field_type;
+      if ($field_data['module'] == 'date' || $field_data['module'] == 'repeating_dates') {
+        $fields_options[$field_data['module'] . '.' . $field_type] = $field_type;
       }
     }
     if (count($fields_options) == 1) {
@@ -168,7 +168,7 @@ function pretty_calendar_block_configure($delta = '') {
     }
   }
   else {
-    $field_desc = t('The Date module is not enabled.');
+    $field_desc = t('No supported date field module is enabled.');
   }
 
   $form['field_date'] = array(
@@ -176,7 +176,7 @@ function pretty_calendar_block_configure($delta = '') {
     '#options' => $fields_options,
     '#disabled' => !$date_module,
     '#title' => t('Date field'),
-    '#default_value' => $config->get('field_date'),
+    '#default_value' => $config->get('date_module') . '.' . $config->get('field_name'),
     '#description' => $field_desc,
   );
   $system_formats = system_get_date_formats();
@@ -248,7 +248,19 @@ function pretty_calendar_block_save($delta = '', $edit = array()) {
   $config->set('theme', $edit['theme']);
   $config->set('node_type', implode(",", $edit['node_type']));
   $config->set('node_invert', $edit['node_invert']);
-  $config->set('field_date', $edit['field_date']);
+  if (!empty($edit['field_date'])) {
+    $field_date = explode('.', $edit['field_date']);
+    $config->set('date_module', $field_date[0]);
+    $config->set('field_name', $field_date[1]);
+    if ($field_date[0] == 'date') {
+      $config->set('column_name_start', $field_date[1] . '_value');
+      $config->set('column_name_end', $field_date[1] . '_value2');
+    }
+    else if ($field_date[0] == 'repeating_dates') {
+      $config->set('column_name_start', $field_date[1] . '_dtstart');
+      $config->set('column_name_end', $field_date[1] . '_dtend');
+    }
+  }
   $config->set('date_format_listing', $edit['date_format_listing']);
   $config->set('upcoming_days', $edit['upcoming_days']);
   $config->set('title_words', $edit['title_words']);
@@ -362,7 +374,8 @@ function pretty_calendar_block_content($month) {
 
   // Get month name. Add context to t() for extended translation.
   $month_name = t(format_date($month, 'custom', 'F', NULL, 'en'), array(), array('context' => 'Nominative')) . ' ' . date('Y', $month);
-  $field_name = $config->get('field_date');
+  $field_name = $config->get('field_name');
+  $column_name_start = $config->get('column_name_start');
   $node_type = $config->get('node_type');
   $use_tooltips = $config->get('preload_tooltips');
   $use_tooltips = $use_tooltips == '-' ? FALSE : TRUE;
@@ -380,12 +393,8 @@ function pretty_calendar_block_content($month) {
   }
   else {
     foreach ($nids as $row) {
-      $field_name = $config->get('field_date');
-      if ($field_name != '') {
-        $field_name .= '_value';
-      }
-      if (isset($row->$field_name)) {
-        $day_nids[(int) date('d', strtotime($row->$field_name))]++;
+      if (isset($row->$column_name_start)) {
+        $day_nids[(int) date('d', strtotime($row->$column_name_start))]++;
       }
       elseif (isset($row->created)) {
         $day_nids[(int) date('d', $row->created)]++;
@@ -542,7 +551,8 @@ function pretty_calendar_plural($count) {
 function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
   $config = config('pretty_calendar.settings');
   global $language;
-  $field_name = $config->get('field_date');
+  $field_name = $config->get('field_name');
+  $column_name_start = $config->get('column_name_start');
   $node_types = explode(',', $config->get('node_type'));
 
   // Check if field was deleted.
@@ -561,7 +571,7 @@ function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
   // Check date.
   if ($date > 0) {
     $timezone_offset = _pretty_calendar_get_timezone_offset();
-    if ($field_name == '') {
+    if (empty($field_name)) {
       $select
         ->condition('created', $date, '>=')
         ->condition('created', $date + 86400, '<');
@@ -569,8 +579,8 @@ function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
     else {
       $select->distinct();
       $select->leftJoin('field_data_' . $field_name, 'fd', 'fd.entity_id = n.nid');
-      $select->fields('fd', array($field_name . '_value'));
-      $select->where('DATE(ADDTIME(' . $field_name . '_value, SEC_TO_TIME(' . $timezone_offset . '))) = :date', array(':date' => date('Y-m-d', $date)));
+      $select->fields('fd', array($column_name_start));
+      $select->where('DATE(ADDTIME(' . $column_name_start . ', SEC_TO_TIME(' . $timezone_offset . '))) = :date', array(':date' => date('Y-m-d', $date)));
     }
   }
   // Check types.
@@ -611,7 +621,9 @@ function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
 function pretty_calendar_select_month_nodes($date = 0) {
   global $language;
   $config = config('pretty_calendar.settings');
-  $field_name = $config->get('field_date');
+  $field_name = $config->get('field_name');
+  $column_name_start = $config->get('column_name_start');
+  $column_name_end = $config->get('column_name_end');
   $node_types = explode(',', $config->get('node_type'));
 
   // Check if field was deleted.
@@ -635,11 +647,18 @@ function pretty_calendar_select_month_nodes($date = 0) {
         ->condition('created', mktime(0, 0, 0, date('m', $date), 1, date('Y', $date)), '>=')
         ->condition('created', mktime(0, 0, 0, date('m', $date) + 1, 1, date('Y', $date)), '<');
     }
-    else {
+    else if ($config->get('date_module') == 'date') {
       $select->distinct();
       $select->leftJoin('field_data_' . $field_name, 'fd', 'fd.entity_id = n.nid');
-      $select->fields('fd', array($field_name . '_value'));
-      $select->where('DATE_FORMAT(ADDTIME(fd.' . $field_name . '_value, SEC_TO_TIME(' . $timezone_offset . ')), \'%Y%m\') = :stamp', array(':stamp' => date('Ym', $date)));
+      $select->fields('fd', array($column_name_start));
+      $select->where('DATE_FORMAT(ADDTIME(fd.' . $column_name_start . ', SEC_TO_TIME(' . $timezone_offset . ')), \'%Y%m\') = :stamp', array(':stamp' => date('Ym', $date)));
+    }
+    else if ($config->get('date_module') == 'repeating_dates') {
+      $select->distinct();
+      $select->leftJoin('field_data_' . $field_name, 'fd', 'fd.entity_id = n.nid');
+      $select->fields('fd', array($column_name_start));
+      $select->condition('fd.' . $column_name_start, mktime(0, 0, 0, date('m', $date + $timezone_offset), 1, date('Y', $date)), '>=');
+      $select->condition('fd.' . $column_name_start, mktime(0, 0, 0, date('m', $date + $timezone_offset) + 1, 1, date('Y', $date)), '<');
     }
   }
   // Check types.
@@ -652,7 +671,7 @@ function pretty_calendar_select_month_nodes($date = 0) {
     }
   }
   $select->addTag('node_access');
-
+dpm($select);
   $result = array();
 
   try {

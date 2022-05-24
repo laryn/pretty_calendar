@@ -226,3 +226,20 @@ function pretty_calendar_update_1001() {
   }
   config_set('pretty_calendar.settings', 'date_format_listing', 'short');
 }
+
+/**
+ * Add support for Repeating Dates module.
+ */
+function pretty_calendar_update_1002() {
+  $config = config('pretty_calendar.settings');
+  $field_date = $config->get('field_date');
+  if (!empty($field_date)) {
+    // Attach any existing fields to the core Date module.
+    $config->set('date_module', 'date');
+    $config->set('field_name', $field_date);
+    $config->set('column_name_start', $field_date . '_value');
+    $config->set('column_name_end', $field_date . '_value2');
+    $config->clear('field_date');
+    $config->save();
+  }
+}
