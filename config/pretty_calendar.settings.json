@@ -1,7 +1,7 @@
 {
     "_config_name": "pretty_calendar.settings",
     "page_title": "Calendar",
-    "theme": "round",
+    "theme": "basis",
     "node_type": "",
     "node_invert": "FALSE",
     "field_date": "",
