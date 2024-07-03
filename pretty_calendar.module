@@ -671,7 +671,6 @@ function pretty_calendar_select_month_nodes($date = 0) {
     }
   }
   $select->addTag('node_access');
-dpm($select);
   $result = array();
 
   try {
