@@ -47,7 +47,7 @@ function pretty_calendar_menu() {
 function pretty_calendar_theme() {
   $hooks = array(
     'pretty_calendar' => array(
-      'template' => 'pretty-calendar',
+      'template' => 'templates/pretty-calendar',
       'variables' => array(
         'daynames' => NULL,
         'content' => NULL,
@@ -57,14 +57,14 @@ function pretty_calendar_theme() {
       ),
     ),
     'pretty_calendar_week' => array(
-      'template' => 'pretty-calendar-week',
+      'template' => 'templates/pretty-calendar-week',
       'variables' => array(
         'days' => NULL,
         'delta' => NULL,
       ),
     ),
     'pretty_calendar_day' => array(
-      'template' => 'pretty-calendar-day',
+      'template' => 'templates/pretty-calendar-day',
       'variables' => array(
         'number' => NULL,
         'date' => NULL,
@@ -302,9 +302,7 @@ function pretty_calendar_block_view($delta = '') {
   $path = backdrop_get_path('module', 'pretty_calendar');
   $block['subject'] = t('Calendar');
   $block['content'] = array(
-    '#markup' => '<div id="calendar-body">'
-    . pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y))
-    . '</div>',
+    '#markup' => pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y)),
     '#attached' => array(
       'js' => array($path . '/js/pretty_calendar.js'),
       'css' => array($path . '/themes/' . $theme . '/calendar.css'),
@@ -714,7 +712,7 @@ function pretty_calendar_day_nodes($year, $month, $day) {
       $output .= '<h3>' . format_date($date, $date_format_listing, NULL, NULL, $language->langcode) . '</h3>';
       $output .= $dateresult;
     }
-    $count ++;
+    $count++;
   } while ($count <= $upcoming_days);
 
   return $output;

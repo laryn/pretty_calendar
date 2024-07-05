@@ -73,7 +73,7 @@
   float: left;
   margin: 2px 0 0 5px;
 }
-.pretty-calendar-month a:hover .calendar-prev {
+.pretty-calendar-month a.calendar-prev:hover {
   background: url("arrows.gif") no-repeat 4px -12px;
   text-decoration: none;
 }
@@ -82,7 +82,7 @@
   float: right;
   margin: 2px 5px 0 0;
 }
-.pretty-calendar-month a:hover .calendar-next {
+.pretty-calendar-month a.calendar-next:hover {
   background: url("arrows.gif") no-repeat 0px -36px;
   text-decoration: none;
 }

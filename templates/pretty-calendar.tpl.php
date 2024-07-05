@@ -13,15 +13,15 @@
  */
 ?>
 
-<div class="block-calendar">
+<div id="calendar-body" class="block-calendar">
   <div class="calendar-container">
     <div class="pretty-calendar-month">
-      <a href="javascript:calendar_go('prev');" rel="<?php print $month_prev; ?>">
-        <div class="calendar-prev">&nbsp;</div>
+      <a href="#" rel="<?php print $month_prev; ?>" class="calendar-prev">
+        <div>&nbsp;</div>
       </a>
       <div class="month-title"><?php print $month_name; ?></div>
-      <a href="javascript:calendar_go('next');" rel="<?php print $month_next; ?>">
-        <div class="calendar-next">&nbsp;</div>
+      <a href="#" rel="<?php print $month_next; ?>" class="calendar-next">
+        <div>&nbsp;</div>
       </a>
     </div>
     <div class="calendar-daynames">

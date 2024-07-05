@@ -104,16 +104,16 @@
   right: 6px;
   top: 6px;
 }
-.pretty-calendar-month a .calendar-prev {
+.pretty-calendar-month a.calendar-prev {
   background: transparent url("arrows.png") no-repeat 0 0;
 }
-.pretty-calendar-month a .calendar-next {
+.pretty-calendar-month a.calendar-next {
   background: transparent url("arrows.png") no-repeat 0 -20px;
 }
-.pretty-calendar-month a:hover .calendar-prev {
+.pretty-calendar-month a.calendar-prev:hover {
   background: transparent url("arrows.png") no-repeat -20px 0;
 }
-.pretty-calendar-month a:hover .calendar-next {
+.pretty-calendar-month a.calendar-next:hover {
   background: transparent url("arrows.png") no-repeat -20px -20px;
 }
 

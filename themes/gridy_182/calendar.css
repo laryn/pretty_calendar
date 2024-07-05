@@ -100,7 +100,7 @@
   float: left;
   margin-left: 5px;
 }
-.pretty-calendar-month a:hover .calendar-prev {
+.pretty-calendar-month a.calendar-prev:hover {
   background: url("arrows.png") no-repeat 0 -16px;
 }
 .pretty-calendar-month .calendar-next {
@@ -108,7 +108,7 @@
   float: right;
   margin-right: 5px;
 }
-.pretty-calendar-month a:hover .calendar-next {
+.pretty-calendar-month a .calendar-next:hover {
   background: url("arrows.png") no-repeat 0 -48px;
 }
 
