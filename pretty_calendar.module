@@ -508,6 +508,7 @@ function pretty_calendar_block_content($month) {
   }
 
   // Format theme array.
+  $now = time() + _pretty_calendar_get_timezone_offset();
   $days = array();
   for ($i = 0; $i < count($week); $i++) {
     for ($j = 0; $j < 7; $j++) {
@@ -521,11 +522,12 @@ function pretty_calendar_block_content($month) {
       if ($j == 6) {
         $classes_array[] = 'pretty-calendar-last';
       }
-      $now = time() + _pretty_calendar_get_timezone_offset();
       if ($day == date('d', $now) && date('m.Y', $now) == date('m.Y', $month)) {
         $classes_array[] = 'pretty-calendar-today';
       }
-
+      if (arg(3) == $day && arg(2) == date('m', $month) && arg(1) == date('Y', $month) && arg(0) == 'calendar') {
+        $classes_array[] = 'pretty-calendar-selected';
+      }
       // YYYY/MM/DD format for links.
       $days_date = '';
       if (!empty($day)) {
