@@ -142,6 +142,7 @@ function pretty_calendar_block_configure($delta = '') {
 
   // Search themes.
   $themes = array(
+    'minimal' => 'Minimal',
     'basis' => 'Basis for Backdrop',
     'standard' => 'Standard (legacy)',
     'round' => 'Rounded (legacy)',
@@ -352,6 +353,20 @@ function pretty_calendar_library_info() {
       'icons' => array(
         'caret-left',
         'caret-right',
+      ),
+    ),
+    'minimal' => array(
+      'title' => 'Pretty Calendar: Minimal theme',
+      'css' => array(
+        $path . '/themes/minimal/calendar.css' => array(),
+      ),
+      'icons' => array(
+        'caret-double-left',
+        'caret-double-right',
+        'spinner',
+      ),
+      'dependencies' => array(
+        array('pretty_calendar', 'pretty_calendar'),
       ),
     ),
     'basis' => array(

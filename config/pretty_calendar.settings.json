@@ -2,7 +2,7 @@
     "_config_name": "pretty_calendar.settings",
     "page_title": "Calendar",
     "show_pager": 1,
-    "theme": "basis",
+    "theme": "minimal",
     "node_type": "",
     "node_invert": 0,
     "field_date": "",
