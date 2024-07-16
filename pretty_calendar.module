@@ -75,6 +75,19 @@ function pretty_calendar_theme() {
         'is_empty' => NULL,
       ),
     ),
+    'pretty_calendar_node_listing' => array(
+      'template' => 'templates/pretty-calendar-node-listing',
+      'variables' => array(
+        'show_today_indicator' => NULL,
+        'show_pager' => NULL,
+        'date_title' => NULL,
+        'pager_prev_link' => NULL,
+        'pager_prev_title' => NULL,
+        'pager_next_link' => NULL,
+        'pager_next_title' => NULL,
+        'content' => NULL,
+      ),
+    ),
   );
   return $hooks;
 }
@@ -112,6 +125,12 @@ function pretty_calendar_block_configure($delta = '') {
     '#title' => t('Calendar page title'),
     '#default_value' => $config->get('page_title'),
     '#description' => t('Choose a title for page that will display all calendar nodes.'),
+  );
+  $form['show_pager'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show pager'),
+    '#default_value' => $config->get('show_pager'),
+    '#description' => t('Show a pager on the calendar listing page.'),
   );
 
   $node_types = node_type_get_types();
@@ -198,7 +217,8 @@ function pretty_calendar_block_configure($delta = '') {
     '#size' => 2,
     '#min' => 0,
     '#max' => 6,
-    '#default_value' => $config->get('upcoming_days'),
+    '#step' => 1,
+    '#default_value' => (int) $config->get('upcoming_days'),
   );
   $form['title_words'] = array(
     '#type' => 'textfield',
@@ -245,6 +265,7 @@ function pretty_calendar_block_configure($delta = '') {
 function pretty_calendar_block_save($delta = '', $edit = array()) {
   $config = config('pretty_calendar.settings');
   $config->set('page_title', $edit['page_title']);
+  $config->set('show_pager', $edit['show_pager']);
   $config->set('theme', $edit['theme']);
   $config->set('node_type', implode(",", $edit['node_type']));
   $config->set('node_invert', $edit['node_invert']);
@@ -262,7 +283,7 @@ function pretty_calendar_block_save($delta = '', $edit = array()) {
     }
   }
   $config->set('date_format_listing', $edit['date_format_listing']);
-  $config->set('upcoming_days', $edit['upcoming_days']);
+  $config->set('upcoming_days', (int) $edit['upcoming_days']);
   $config->set('title_words', $edit['title_words']);
   $config->set('preload_tooltips', $edit['preload_tooltips']);
   $config->set('tooltip_count', $edit['tooltip_count']);
@@ -304,11 +325,82 @@ function pretty_calendar_block_view($delta = '') {
   $block['content'] = array(
     '#markup' => pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y)),
     '#attached' => array(
-      'js' => array($path . '/js/pretty_calendar.js'),
-      'css' => array($path . '/themes/' . $theme . '/calendar.css'),
+      'library' => array(
+        array('pretty_calendar', $theme),
+      ),
     ),
   );
   return $block;
+}
+
+/**
+ * Implements hook_library_info().
+ *
+ */
+function pretty_calendar_library_info() {
+  $path = backdrop_get_path('module', 'pretty_calendar');
+  $libraries = array(
+    'pretty_calendar' => array(
+      'title' => 'Pretty Calendar',
+      'website' => 'https://backdropcms.org/project/pretty_calendar',
+      'js' => array(
+        $path . '/js/pretty_calendar.js' => array(),
+      ),
+      'css' => array(
+        $path . '/css/pretty_calendar.css' => array(),
+      ),
+      'icons' => array(
+        'caret-left',
+        'caret-right',
+      ),
+    ),
+    'basis' => array(
+      'title' => 'Pretty Calendar: Basis theme',
+      'css' => array(
+        $path . '/themes/basis/calendar.css' => array(),
+      ),
+      'dependencies' => array(
+        array('pretty_calendar', 'pretty_calendar'),
+      ),
+    ),
+    'standard' => array(
+      'title' => 'Pretty Calendar: Standard theme',
+      'css' => array(
+        $path . '/themes/standard/calendar.css' => array(),
+      ),
+      'dependencies' => array(
+        array('pretty_calendar', 'pretty_calendar'),
+      ),
+    ),
+    'round' => array(
+      'title' => 'Pretty Calendar: Rounded theme',
+      'css' => array(
+        $path . '/themes/round/calendar.css' => array(),
+      ),
+      'dependencies' => array(
+        array('pretty_calendar', 'pretty_calendar'),
+      ),
+    ),
+    'vista_198' => array(
+      'title' => 'Pretty Calendar: Vista 198px theme',
+      'css' => array(
+        $path . '/themes/vista_198/calendar.css' => array(),
+      ),
+      'dependencies' => array(
+        array('pretty_calendar', 'pretty_calendar'),
+      ),
+    ),
+    'gridy_182' => array(
+      'title' => 'Pretty Calendar: Gridy 182px theme',
+      'css' => array(
+        $path . '/themes/gridy_182/calendar.css' => array(),
+      ),
+      'dependencies' => array(
+        array('pretty_calendar', 'pretty_calendar'),
+      ),
+    ),
+  );
+  return $libraries;
 }
 
 /**
@@ -424,7 +516,7 @@ function pretty_calendar_block_content($month) {
       // YYYY/MM/DD format for links.
       $days_date = '';
       if (!empty($day)) {
-        $days_date = date('Y/m', $month) . '/' . ($day > 9 ? $day : '0' . $day);
+        $days_date = date('Y/m', $month) . '/' . sprintf('%02d', $day);
       }
       $days[] = theme('pretty_calendar_day', array(
         'number' => $day,
@@ -703,19 +795,52 @@ function pretty_calendar_day_nodes($year, $month, $day) {
   global $language;
   $output = '';
   $config = config('pretty_calendar.settings');
-  $upcoming_days = $config->get('upcoming_days');
+  $upcoming_days = (int) $config->get('upcoming_days');
   $date_format_listing = $config->get('date_format_listing');
+  $now = time() + _pretty_calendar_get_timezone_offset();
+  $show_today_indicator = 0;
+  $show_pager = $config->get('show_pager');
   $count = 0;
   do {
-    $date = mktime(0, 0, 0, (int) $month, (int) $day + $count, (int) $year);
+    $date = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year) + $count * 86400;
+    $show_today_indicator = (empty($count) && date('Y-m-d', $now) == $year . '-' . $month . '-' . $day);
     $dateresult = pretty_calendar_node_list($date);
     if ($dateresult) {
-      $output .= '<h3>' . format_date($date, $date_format_listing, NULL, NULL, $language->langcode) . '</h3>';
-      $output .= $dateresult;
+      if ($show_pager) {
+        $prev_date = $date - (($upcoming_days + 1) * 86400);
+        $pager_prev_link = url('calendar/' . date('Y', $prev_date) . '/' . date('m', $prev_date) . '/' . date('d', $prev_date));
+        $pager_prev_title = format_date($prev_date, $date_format_listing, NULL, NULL, $language->langcode);
+        $next_date = $date + (($upcoming_days + 1) * 86400);
+        $pager_next_link = url('calendar/' . date('Y', $next_date) . '/' . date('m', $next_date) . '/' . date('d', $next_date));
+        $pager_next_title = format_date($next_date, $date_format_listing, NULL, NULL, $language->langcode);
+      }
+      else {
+        $pager_prev_link = NULL;
+        $pager_prev_title = NULL;
+        $pager_next_link = NULL;
+        $pager_next_title = NULL;
+      }
+      $output .= theme('pretty_calendar_node_listing', array(
+        'show_today_indicator' => $show_today_indicator,
+        'date_title' => format_date($date, $date_format_listing, NULL, NULL, $language->langcode),
+        'show_pager' => $show_pager,
+        'pager_prev_link' => $pager_prev_link,
+        'pager_prev_title' => $pager_prev_title,
+        'pager_next_link' => $pager_next_link,
+        'pager_next_title' => $pager_next_title,
+        'content' => $dateresult,
+      ));
+      // If we've already shown the pager once, we don't need to do it anymore
+      // on potential upcoming days (ie. if we're showing additional upcoming
+      // days).
+      $show_pager = 0;
     }
     $count++;
   } while ($count <= $upcoming_days);
 
+  if (!empty($output)) {
+    backdrop_add_library('pretty_calendar', 'pretty_calendar');
+  }
   return $output;
 }
 

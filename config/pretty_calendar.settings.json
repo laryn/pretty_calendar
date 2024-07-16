@@ -1,14 +1,15 @@
 {
     "_config_name": "pretty_calendar.settings",
     "page_title": "Calendar",
+    "show_pager": 1,
     "theme": "basis",
     "node_type": "",
-    "node_invert": "FALSE",
+    "node_invert": 0,
     "field_date": "",
     "date_format_listing": "short",
     "title_words": "event, events",
     "node_per_page": "20",
     "preload_tooltips": "-",
     "tooltip_count": "5",
-    "separate_languages": "FALSE"
+    "separate_languages": 0
 }
