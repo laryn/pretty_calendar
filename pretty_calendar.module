@@ -534,7 +534,10 @@ function pretty_calendar_block_content($month) {
         $days_date = date('Y/m', $month) . '/' . sprintf('%02d', $day);
       }
       $count = !empty($day) ? $day_nids[$day] : 0;
-      if (!$count) {
+      if (!$count && $day < $day_count && $day != "") {
+        $classes_array[] = 'pretty-calendar-empty';
+      }
+      elseif (!$count) {
         $classes_array[] = 'pretty-calendar-blank';
       }
       $days[] = theme('pretty_calendar_day', array(
