@@ -69,7 +69,7 @@ function pretty_calendar_theme() {
         'number' => NULL,
         'date' => NULL,
         'delta' => NULL,
-        'class' => NULL,
+        'classes' => array(),
         'count' => NULL,
         'using_tooltip' => NULL,
         'is_empty' => NULL,
@@ -512,20 +512,17 @@ function pretty_calendar_block_content($month) {
   for ($i = 0; $i < count($week); $i++) {
     for ($j = 0; $j < 7; $j++) {
       $day = !empty($week[$i][$j]) ? $week[$i][$j] : '';
-      $cls = '';
+      $classes = array('pretty-calendar-day');
       // Define cell classes.
       if ($j > 4) {
-        $cls = 'pretty-calendar-weekend';
-      }
-      else {
-        $cls = 'pretty-calendar-day';
+        $classes[] = 'pretty-calendar-weekend';
       }
       if ($j == 6) {
-        $cls .= ' pretty-calendar-last';
+        $classes[] = 'pretty-calendar-last';
       }
       $now = time() + _pretty_calendar_get_timezone_offset();
       if ($day == date('d', $now) && date('m.Y', $now) == date('m.Y', $month)) {
-        $cls .= ' pretty-calendar-today';
+        $classes[] = 'pretty-calendar-today';
       }
 
       // YYYY/MM/DD format for links.
@@ -533,12 +530,16 @@ function pretty_calendar_block_content($month) {
       if (!empty($day)) {
         $days_date = date('Y/m', $month) . '/' . sprintf('%02d', $day);
       }
+      $count = !empty($day) ? $day_nids[$day] : 0;
+      if (!$count) {
+        $classes[] = 'blank';
+      }
       $days[] = theme('pretty_calendar_day', array(
         'number' => $day,
         'date' => $days_date,
         'delta' => $j + 1,
-        'class' => $cls,
-        'count' => !empty($day) ? $day_nids[$day] : 0,
+        'classes' => $classes,
+        'count' => $count,
         'using_tooltip' => $use_tooltips,
         'is_empty' => empty($day),
       ));
