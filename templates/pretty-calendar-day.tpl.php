@@ -7,7 +7,7 @@
  * - $number: Day number from beginning of month
  * - $date: Day number from beginning of month
  * - $delta: Day number from beginning of week
- * - $classes: Default cell classes (array)
+ * - $class: Default cell classes (string)
  * - $count: Node counter
  * - $using_tooltip: Using tooltips (boolean)
  * - $is_empty: Blank cell (boolean)
@@ -24,7 +24,7 @@ endif;
 <?php if ($count) : ?>
   <a href="<?php print $link_path; ?>" title="<?php print $link_title; ?>" rel="<?php print $link_rel; ?>">
 <?php endif; ?>
-<div class="<?php print implode(' ', $classes); ?>">
+<div class="<?php print $class; ?>">
   <div class="calendar-value">
     <?php print $number; ?>
   </div>
