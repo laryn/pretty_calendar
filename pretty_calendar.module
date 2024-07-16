@@ -416,7 +416,8 @@ function pretty_calendar_block_content($month) {
       if ($j == 6) {
         $cls .= ' pretty-calendar-last';
       }
-      if ($day == date('d') && date('m.Y') == date('m.Y', $month)) {
+      $now = time() + _pretty_calendar_get_timezone_offset();
+      if ($day == date('d', $now) && date('m.Y', $now) == date('m.Y', $month)) {
         $cls .= ' pretty-calendar-today';
       }
 
