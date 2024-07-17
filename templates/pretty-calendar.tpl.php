@@ -9,18 +9,20 @@
  * - $content: Rendered weeks.
  * - $month_name: Selected month name
  * - $month_prev: Previous month time (Unix)
+ * - $month_prev_text: Previous month text, run through t() for translation.
  * - $month_next: Next month time (Unix)
+ * - $month_next_text: Next month text, run through t() for translation.
  */
 ?>
 
 <div id="calendar-body" class="block-calendar">
   <div class="calendar-container">
     <div class="pretty-calendar-month">
-      <a href="#" rel="<?php print $month_prev; ?>" class="calendar-prev">
+      <a href="#" rel="<?php print $month_prev; ?>" class="calendar-prev" aria-label="<?php print $month_prev_text; ?>">
         <div>&nbsp;</div>
       </a>
       <div class="month-title"><?php print $month_name; ?></div>
-      <a href="#" rel="<?php print $month_next; ?>" class="calendar-next">
+      <a href="#" rel="<?php print $month_next; ?>" class="calendar-next" aria-label="<?php print $month_next_text; ?>">
         <div>&nbsp;</div>
       </a>
     </div>

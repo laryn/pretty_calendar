@@ -52,7 +52,9 @@ function pretty_calendar_theme() {
         'daynames' => NULL,
         'content' => NULL,
         'month_prev' => NULL,
+        'month_prev_text' => NULL,
         'month_next' => NULL,
+        'month_next_text' => NULL,
         'month_name' => NULL,
       ),
     ),
@@ -565,7 +567,9 @@ function pretty_calendar_block_content($month) {
     'daynames' => $daynames,
     'content' => $output,
     'month_prev' => mktime(0, 0, 0, date('m', $month) - 1, 12, date('Y', $month)),
+    'month_prev_text' => t('Previous month'),
     'month_next' => mktime(0, 0, 0, date('m', $month) + 1, 12, date('Y', $month)),
+    'month_next_text' => t('Next month'),
     'month_name' => $month_name,
   ));
 }
