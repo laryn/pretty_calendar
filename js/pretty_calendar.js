@@ -27,10 +27,9 @@
       $.get(Backdrop.settings.basePath + "calendar_get/" + $(".calendar-" + dir).attr("rel"), function (data) {
         $("#calendar-body").html(" ");
         $("#calendar-body").replaceWith(data);
-        $("#calendar-body .calendar-daynames .calendar-value").each(function () {
-          $(this).html($(this).html().substr(0, 3));
-        });
         Backdrop.attachBehaviors($("#calendar-body"));
+        var $month = $("#calendar-body .month-title").text();
+        Backdrop.announce(Backdrop.t('The calendar has been refreshed with content from !month.', { '!month': $month }));
       });
     },
 

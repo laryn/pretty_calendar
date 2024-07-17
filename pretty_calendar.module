@@ -354,6 +354,10 @@ function pretty_calendar_library_info() {
         'caret-left',
         'caret-right',
       ),
+      'dependencies' => array(
+        array('system', 'backdrop.ajax'),
+        array('system', 'backdrop.announce'),
+      ),
     ),
     'minimal' => array(
       'title' => 'Pretty Calendar: Minimal theme',
