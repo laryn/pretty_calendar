@@ -434,26 +434,25 @@ function pretty_calendar_library_info() {
  *   Rendered block content.
  */
 function pretty_calendar_block_content($month) {
-  $config = config('pretty_calendar.settings');
   global $language;
+  $config = config('pretty_calendar.settings');
+  // Get system settings for first day of the week. 0 = Sunday, 1 = Monday, etc.
+  $first_day = config_get('system.date', 'first_day');
 
   // Format month array.
   // Get month timestamp.
   $month = mktime(0, 0, 0, date('m', $month), 12, date('Y', $month));
   // Get number of days in the given month.
-  $dayofmonth = date('t', $month);
+  $days_in_month = date('t', $month);
   $day_count = 1;
   $num = 0;
   // Fill first week.
   // Days of previous month in beginning of the week will be skipped.
   for ($i = 0; $i < 7; $i++) {
-    // Get mumeric representation of the day of the week.
-    $dayofweek = date('w', mktime(0, 0, 0, date('m', $month), $day_count, date('Y', $month)));
-    $dayofweek = $dayofweek - 1;
-    if ($dayofweek == -1) {
-      $dayofweek = 6;
-    }
-    if ($dayofweek == $i) {
+    // Get numeric representation of the day of the week.
+    $day_of_week = date('w', mktime(0, 0, 0, date('m', $month), $day_count, date('Y', $month)));
+    $day_of_week = ($day_of_week + 7 - $first_day) % 7;
+    if ($day_of_week == $i) {
       $week[$num][$i] = $day_count;
       $day_count++;
     }
@@ -468,19 +467,21 @@ function pretty_calendar_block_content($month) {
     for ($i = 0; $i < 7; $i++) {
       $week[$num][$i] = $day_count;
       $day_count++;
-      if ($day_count > $dayofmonth) {
+      if ($day_count > $days_in_month) {
         break;
       }
     }
-    if ($day_count > $dayofmonth) {
+    if ($day_count > $days_in_month) {
       break;
     }
   }
 
   // Get names of the days.
+  $first_day = config_get('system.date', 'first_day');
   $daynames = array();
-  for ($i = 1; $i <= 7; $i++) {
-    $daynames[] = format_date(mktime(0, 0, 0, 1, $i, 2001), 'custom', 'D', NULL, $language->langcode);
+  for ($i = 0; $i <= 6; $i++) {
+    $adjusted_day = ($i + $first_day) % 7;
+    $daynames[] = format_date(mktime(0, 0, 0, 1, $adjusted_day, 2001), 'custom', 'D', NULL, $language->langcode);
   }
 
   // Get month name. Add context to t() for extended translation.
