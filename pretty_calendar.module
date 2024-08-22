@@ -341,11 +341,13 @@ function pretty_calendar_block_view($delta = '') {
  *
  */
 function pretty_calendar_library_info() {
+  $module_info = system_get_info('module', 'pretty_calendar');
   $path = backdrop_get_path('module', 'pretty_calendar');
   $libraries = array(
     'pretty_calendar' => array(
       'title' => 'Pretty Calendar',
       'website' => 'https://backdropcms.org/project/pretty_calendar',
+      'version' => $module_info['version'],
       'js' => array(
         $path . '/js/pretty_calendar.js' => array(),
       ),
