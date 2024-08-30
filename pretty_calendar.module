@@ -313,7 +313,7 @@ function pretty_calendar_block_view($delta = '') {
     }
   }
 
-  if (arg(0) == 'node' && arg(1) > 0) {
+  if (arg(0) == 'node' && is_numeric(arg(1)) && arg(1) > 0) {
     $types = explode(',', $config->get('node_type'));
     $use_all = in_array('', $types);
     $node = node_load(arg(1));
@@ -323,7 +323,6 @@ function pretty_calendar_block_view($delta = '') {
     }
   }
 
-  $path = backdrop_get_path('module', 'pretty_calendar');
   $block['subject'] = t('Calendar');
   $block['content'] = array(
     '#markup' => pretty_calendar_block_content(mktime(0, 0, 0, $m, 1, $y)),
