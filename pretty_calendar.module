@@ -24,16 +24,16 @@ function pretty_calendar_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['calendar_links/%/%/%'] = array(
-    'title' => 'Calendar',
+  $items['calendar_links/%/%/%/%'] = array(
+    'title callback' => 'pretty_calendar_links_loader_title_callback',
+    'title arguments' => array(1, 2, 3, 4),
     'page callback' => 'pretty_calendar_links_loader',
-    'page arguments' => array(1, 2, 3),
+    'page arguments' => array(1, 2, 3, 4),
     'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
   );
   $items['calendar'] = array(
     'title' => 'Calendar',
-    'page callback' => 'pretty_calendar_node_list',
+    'page callback' => 'pretty_calendar_day_nodes',
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
     'weight' => -50,
@@ -68,12 +68,16 @@ function pretty_calendar_theme() {
     'pretty_calendar_day' => array(
       'template' => 'templates/pretty-calendar-day',
       'variables' => array(
-        'number' => NULL,
+        'day_number' => NULL,
         'date' => NULL,
         'delta' => NULL,
-        'class' => NULL,
         'count' => NULL,
-        'using_tooltip' => NULL,
+        'link_path' => NULL,
+        'link_title' => NULL,
+        'link_class' => NULL,
+        'link_dialog' => NULL,
+        'link_dialog_options' => NULL,
+        'wrapper_class' => NULL,
         'is_empty' => NULL,
       ),
     ),
@@ -231,24 +235,23 @@ function pretty_calendar_block_configure($delta = '') {
     '#default_value' => $config->get('title_words'),
     '#description' => t('Choose a name for the events that will be displayed when hovering on a date. For example, "12 events". Enter comma-separated words for plurals (for example, "event, events").'),
   );
-  $form['preload_tooltips'] = array(
+  $form['link_type'] = array(
+    '#title' => t('Link type'),
     '#type' => 'radios',
     '#options' => array(
-      '+' => t('Display links to events'),
-      '-' => t('Display the count of events'),
+      'popup' => t('Modal popup'),
+      'link' => t('Link to the listing page'),
     ),
-    '#title' => t('Tooltip type'),
-    '#default_value' => $config->get('preload_tooltips'),
+    '#default_value' => $config->get('link_type'),
   );
-  $form['tooltip_count'] = array(
+  $form['event_count'] = array(
+    '#title' => t('Number of events in the popup'),
     '#type' => 'select',
     '#options' => backdrop_map_assoc(array(1, 2, 3, 4, 5, 8, 10, 15, 20)),
-    '#title' => t('Number of links in the tooltip'),
-    '#default_value' => $config->get('tooltip_count'),
-    '#description' => t('Specify the number of links in the tooltip.'),
+    '#default_value' => $config->get('event_count'),
     '#states' => array(
-      'invisible' => array(
-        ':input[name="block_settings[preload_tooltips]"]' => array('value' => '-'),
+      'visible' => array(
+        ':input[name="block_settings[link_type]"]' => array('value' => 'popup'),
       ),
     ),
   );
@@ -288,8 +291,8 @@ function pretty_calendar_block_save($delta = '', $edit = array()) {
   $config->set('date_format_listing', $edit['date_format_listing']);
   $config->set('upcoming_days', (int) $edit['upcoming_days']);
   $config->set('title_words', $edit['title_words']);
-  $config->set('preload_tooltips', $edit['preload_tooltips']);
-  $config->set('tooltip_count', $edit['tooltip_count']);
+  $config->set('link_type', $edit['link_type']);
+  $config->set('event_count', $edit['event_count']);
   $config->set('separate_languages', $edit['separate_languages']);
   $config->save();
 }
@@ -490,8 +493,7 @@ function pretty_calendar_block_content($month) {
   $field_name = $config->get('field_name');
   $column_name_start = $config->get('column_name_start');
   $node_type = $config->get('node_type');
-  $use_tooltips = $config->get('preload_tooltips');
-  $use_tooltips = $use_tooltips == '-' ? FALSE : TRUE;
+  $link_type = $config->get('link_type');
 
   $output = '';
 
@@ -521,41 +523,56 @@ function pretty_calendar_block_content($month) {
   for ($i = 0; $i < count($week); $i++) {
     for ($j = 0; $j < 7; $j++) {
       $day = !empty($week[$i][$j]) ? $week[$i][$j] : '';
-      $classes_array = [];
-      $classes_array[] = 'pretty-calendar-day';
+      $wrapper_classes_array = [];
+      $link_classes_array = [
+        'pretty-calendar--link',
+        'pretty-calendar--link__' . $link_type,
+      ];
+      if ($link_type == 'popup') {
+        $link_classes_array[] = 'use-ajax';
+        $link_data_dialog = 'true';
+      }
+      else {
+        $link_data_dialog = 'false';
+      }
+      $wrapper_classes_array[] = 'pretty-calendar-day';
       // Define cell classes.
       if ($j > 4) {
-        $classes_array[] = 'pretty-calendar-weekend';
+        $wrapper_classes_array[] = 'pretty-calendar-weekend';
       }
       if ($j == 6) {
-        $classes_array[] = 'pretty-calendar-last';
+        $wrapper_classes_array[] = 'pretty-calendar-last';
       }
       if ($day == date('d', $now) && date('m.Y', $now) == date('m.Y', $month)) {
-        $classes_array[] = 'pretty-calendar-today';
+        $wrapper_classes_array[] = 'pretty-calendar-today';
       }
       if (arg(3) == $day && arg(2) == date('m', $month) && arg(1) == date('Y', $month) && arg(0) == 'calendar') {
-        $classes_array[] = 'pretty-calendar-selected';
-      }
-      // YYYY/MM/DD format for links.
-      $days_date = '';
-      if (!empty($day)) {
-        $days_date = date('Y/m', $month) . '/' . sprintf('%02d', $day);
+        $wrapper_classes_array[] = 'pretty-calendar-selected';
       }
       $count = !empty($day) ? $day_nids[$day] : 0;
-      if (!$count && $day < $day_count && $day != "") {
-        $classes_array[] = 'pretty-calendar-empty';
+      if (!$count) {
+        $wrapper_classes_array[] = ($day < $day_count && $day != "") ? 'pretty-calendar-empty' : 'pretty-calendar-blank';
       }
-      elseif (!$count) {
-        $classes_array[] = 'pretty-calendar-blank';
-      }
+
+      $link_title = (!empty($day)) ? pretty_calendar_plural($count) : '';
+      $url_prefix = ($link_type == 'popup') ? 'calendar_links' : 'calendar';
+      $url_suffix = ($link_type == 'popup') ? '/nojs' : '';
+      $link_path = (!empty($day)) ? url($url_prefix . '/' . date('Y/m', $month) . '/' . sprintf('%02d', $day) . $url_suffix) : '';
+
       $days[] = theme('pretty_calendar_day', array(
-        'number' => $day,
-        'date' => $days_date,
+        'day_number' => $day,
         'delta' => $j + 1,
-        'class' => implode(' ', $classes_array),
+        'wrapper_class' => implode(' ', $wrapper_classes_array),
         'count' => $count,
-        'using_tooltip' => $use_tooltips,
-        'is_empty' => empty($day),
+        'link_title' => $link_title,
+        'link_path' => $link_path,
+        'link_class' => implode(' ', $link_classes_array),
+        'link_dialog' => $link_data_dialog,
+        'link_dialog_options' => json_encode(array(
+          'modal' => TRUE,
+          'dialogClass' => 'pretty-calendar--dialog',
+          'width' => '300',
+        )),
       ));
     }
     $output .= theme('pretty_calendar_week', array(
@@ -606,36 +623,57 @@ function pretty_calendar_content_loader($month) {
  * @return string
  *   Rendered list of links.
  */
-function pretty_calendar_links_loader($year, $month, $day) {
-  header('Content-Type: text/html; charset=utf-8');
-
+function pretty_calendar_links_loader($year, $month, $day, $page_mode = 'nojs') {
+  $markup = '';
   $date = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
   $result = pretty_calendar_select_nodes($date, TRUE);
-  if (count($result) == 0) {
-    print 'Error';
-    backdrop_exit();
-  }
-
-  $tooltip_count = config_get('pretty_calendar.settings', 'tooltip_count');
-  $counter = 0;
-  $list = array();
-  foreach ($result as $row) {
-    $list['items'][] = l($row->title, 'node/' . $row->nid);
-    $counter++;
-    if ($counter >= $tooltip_count) {
-      break;
+  $event_names = explode(',', config_get('pretty_calendar.settings', 'title_words'));
+  $events_name = trim($event_names[1]);
+  if (count($result) > 0) {
+    $event_count = config_get('pretty_calendar.settings', 'event_count');
+    $counter = 0;
+    $list = array();
+    foreach ($result as $row) {
+      $list['items'][] = l($row->title, 'node/' . $row->nid);
+      $counter++;
+      if ($counter >= $event_count) {
+        break;
+      }
     }
+    $markup .= theme('item_list', $list);
   }
-  print theme('item_list', $list);
-  $more_links = count($result) - $tooltip_count;
-  if ($more_links > 0) {
-    $links = pretty_calendar_plural($more_links);
-    print '<p class="tooltip_summary">' .
-      l(t('more @count', array('@count' => $links)), "calendar/$year/$month/$day") .
-      '</p>';
+  else {
+    $markup .= '<p class="pretty-calendar--shortlist__empty">' . t('No @events', array('@events' => $events_name)) . '</p>';
   }
 
-  backdrop_exit();
+  $markup .= '<p class="pretty-calendar--shortlist__page-link">' .
+      l(t('Go to @events listing', array('@events' => $events_name)), "calendar/$year/$month/$day") .
+      '</p>';
+
+  return array(
+    'content' => array(
+      '#markup' => $markup,
+    ),
+  );
+}
+
+/**
+ * Title callback for AJAX response for calendar day nodes.
+ */
+function pretty_calendar_links_loader_title_callback($year, $month, $day, $page_mode = 'nojs') {
+  $date = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
+  if ($page_mode === 'ajax') {
+    $title = format_date($date, 'custom', 'F j, Y');
+  }
+  else {
+    $event_names = explode(',', config_get('pretty_calendar.settings', 'title_words'));
+    $events_name = trim($event_names[1]);
+    $title = t('@events for @date', array(
+      '@events' => ucfirst($events_name),
+      '@date' => format_date($date, 'custom', 'l, F j, Y'),
+    ));
+  }
+  return $title;
 }
 
 /**
@@ -652,11 +690,11 @@ function pretty_calendar_links_loader($year, $month, $day) {
  *   Formatted plural value. For example, "17 events".
  */
 function pretty_calendar_plural($count) {
-  $words = explode(',', config_get('pretty_calendar.settings', 'title_words'));
-  if (!isset($words[0]) || !isset($words[1])) {
-    $words = explode(',', 'story,stories');
+  $event_names = explode(',', config_get('pretty_calendar.settings', 'title_words'));
+  if (!isset($event_names[0]) || !isset($event_names[1])) {
+    $event_names = explode(',', 'event,events');
   }
-  return format_plural($count, '1 ' . $words[0], '@count ' . $words[1]);
+  return format_plural($count, '1 ' . trim($event_names[0]), '@count ' . trim($event_names[1]));
 }
 
 /**
@@ -672,8 +710,8 @@ function pretty_calendar_plural($count) {
  *   By dependency of $links_only value, result will be array or query result.
  */
 function pretty_calendar_select_nodes($date = 0, $links_only = FALSE) {
-  $config = config('pretty_calendar.settings');
   global $language;
+  $config = config('pretty_calendar.settings');
   $field_name = $config->get('field_name');
   $column_name_start = $config->get('column_name_start');
   $node_types = explode(',', $config->get('node_type'));
@@ -823,8 +861,12 @@ function pretty_calendar_select_month_nodes($date = 0) {
  * @return string
  *   Rendered page content.
  */
-function pretty_calendar_day_nodes($year, $month, $day) {
+function pretty_calendar_day_nodes($year = 0, $month = 0, $day = 0) {
   global $language;
+
+  $year = (!empty($year)) ? $year : date('Y');
+  $month = (!empty($month)) ? $month : date('m');
+  $day = (!empty($day)) ? $day : date('d');
   $output = '';
   $config = config('pretty_calendar.settings');
   $upcoming_days = (int) $config->get('upcoming_days');
