@@ -4,31 +4,33 @@
  * Theme implementation to display day cell.
  *
  * Variables:
- * - $number: Day number from beginning of month
- * - $date: Day number from beginning of month
+ * - $day_number: Day number from beginning of month
  * - $delta: Day number from beginning of week
- * - $class: Default cell classes (string)
- * - $count: Node counter
- * - $using_tooltip: Using tooltips (boolean)
- * - $is_empty: Blank cell (boolean)
+ * - $wrapper_class: Default wrapper classes (string)
+ * - $link_class: Default link classes (string)
+ * - $link_path: Path to day view
+ * - $link_title: Title attribute for link
+ * - $link_dialog: Boolean to indicate if this link should open in a dialog
+ * - $link_dialog_options: Link dialog options (JSON)
+ * - $count: Node count; 0 if empty.
  *
  */
-
-if ($count) :
-  $link_title = pretty_calendar_plural($count);
-  $link_path = url('calendar/' . $date);
-  $link_rel = ($using_tooltip) ? $date : '';
-endif;
 ?>
 
-<?php if ($count) : ?>
-  <a href="<?php print $link_path; ?>" title="<?php print $link_title; ?>" rel="<?php print $link_rel; ?>">
-<?php endif; ?>
-<div class="<?php print $class; ?>">
+<div class="<?php print $wrapper_class; ?>">
+  <?php if ($count) : ?>
+    <a href="<?php print $link_path; ?>" title="<?php print $link_title; ?>" class="<?php print $link_class; ?>"
+      <?php if ($link_dialog) : ?>
+        data-dialog="true" data-dialog-options=<?php print $link_dialog_options; ?>
+      <?php endif; ?>
+    >
+  <?php endif; ?>
+
   <div class="calendar-value">
-    <?php print $number; ?>
+    <?php print $day_number; ?>
   </div>
+
+  <?php if ($count) : ?>
+    </a>
+  <?php endif; ?>
 </div>
-<?php if ($count) : ?>
-  </a>
-<?php endif; ?>
