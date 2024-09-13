@@ -1,141 +1,210 @@
 {
-  "_config_name": "views.view.pretty_calendar",
-  "name": "pretty_calendar",
-  "module": "pretty_calendar",
-  "description": "",
-  "tag": "default",
-  "disabled": false,
-  "base_table": "node",
-  "human_name": "Pretty Calendar",
-  "core": 1,
-  "display": {
-    "default": {
-      "display_title": "Master",
-      "display_plugin": "default",
-      "display_options": {
-        "query": {
-          "type": "views_query",
-          "options": []
+    "_config_name": "views.view.pretty_calendar",
+    "name": "pretty_calendar",
+    "description": "",
+    "module": "pretty_calendar",
+    "storage": 1,
+    "tag": "default",
+    "disabled": false,
+    "base_table": "node",
+    "human_name": "Pretty Calendar",
+    "core": 1,
+    "display": {
+        "default": {
+            "display_title": "Default",
+            "display_plugin": "default",
+            "display_options": {
+                "query": {
+                    "type": "views_query",
+                    "options": []
+                },
+                "access": {
+                    "type": "perm",
+                    "perm": "access content"
+                },
+                "cache": {
+                    "type": "none"
+                },
+                "exposed_form": {
+                    "type": "basic"
+                },
+                "pager": {
+                    "type": "full",
+                    "options": {
+                        "items_per_page": "25"
+                    }
+                },
+                "style_plugin": "default",
+                "row_plugin": "node",
+                "fields": {
+                    "title": {
+                        "id": "title",
+                        "table": "node",
+                        "field": "title",
+                        "label": "",
+                        "alter": {
+                            "alter_text": 0,
+                            "make_link": 0,
+                            "absolute": 0,
+                            "trim": 0,
+                            "word_boundary": 0,
+                            "ellipsis": 0,
+                            "strip_tags": 0,
+                            "html": 0
+                        },
+                        "hide_empty": 0,
+                        "empty_zero": 0,
+                        "link_to_node": 1
+                    }
+                },
+                "filters": {
+                    "status": {
+                        "value": 1,
+                        "table": "node",
+                        "field": "status",
+                        "id": "status",
+                        "expose": {
+                            "operator": false
+                        },
+                        "group": 1
+                    }
+                },
+                "sorts": [],
+                "title": "Pretty Calendar listing",
+                "row_options": {
+                    "build_mode": "teaser",
+                    "title": true,
+                    "links": true,
+                    "comments": false
+                },
+                "arguments": {
+                    "nid": {
+                        "id": "nid",
+                        "table": "node",
+                        "field": "nid",
+                        "relationship": "none",
+                        "group_type": "group",
+                        "ui_name": "",
+                        "default_action": "empty",
+                        "exception": {
+                            "value": "all",
+                            "title_enable": 0,
+                            "title": "All"
+                        },
+                        "title_enable": 0,
+                        "title": "",
+                        "breadcrumb_enable": 0,
+                        "breadcrumb": "",
+                        "default_argument_type": "fixed",
+                        "default_argument_options": {
+                            "argument": ""
+                        },
+                        "default_argument_skip_url": 0,
+                        "summary_options": {
+                            "base_path": "",
+                            "count": "1",
+                            "items_per_page": "25",
+                            "override": 0
+                        },
+                        "summary": {
+                            "sort_order": "asc",
+                            "number_of_records": "0",
+                            "format": "default_summary"
+                        },
+                        "specify_validation": 0,
+                        "validate": {
+                            "type": "none",
+                            "fail": "not found"
+                        },
+                        "validate_options": [],
+                        "break_phrase": 1,
+                        "not": 0
+                    }
+                },
+                "empty": {
+                    "area": {
+                        "id": "area",
+                        "table": "views",
+                        "field": "area",
+                        "relationship": "none",
+                        "group_type": "group",
+                        "ui_name": "",
+                        "label": "",
+                        "empty": true,
+                        "content": "<p>No results for the date specified.</p>\r\n",
+                        "format": "filtered_html",
+                        "tokenize": 0
+                    }
+                }
+            }
         },
-        "access": {
-          "type": "perm",
-          "perm": "access content"
+        "teaser_list": {
+            "display_title": "Teaser list",
+            "display_plugin": "embed",
+            "display_options": {
+                "query": {
+                    "type": "views_query",
+                    "options": []
+                },
+                "display_description": "",
+                "style_plugin": "list",
+                "defaults": {
+                    "style_plugin": false,
+                    "style_options": false,
+                    "row_plugin": false,
+                    "row_options": false
+                },
+                "style_options": {
+                    "row_class": "",
+                    "default_row_class": 1,
+                    "row_class_special": 1,
+                    "uses_fields": 0,
+                    "type": "ul",
+                    "wrapper_class": "item-list",
+                    "class": ""
+                },
+                "row_plugin": "node",
+                "row_options": {
+                    "build_mode": "teaser",
+                    "title": true,
+                    "links": true,
+                    "comments": false
+                }
+            }
         },
-        "cache": {
-          "type": "none"
-        },
-        "exposed_form": {
-          "type": "basic"
-        },
-        "pager": {
-          "type": "full",
-          "options": {
-            "items_per_page": "25"
-          }
-        },
-        "style_plugin": "default",
-        "row_plugin": "node",
-        "fields": {
-          "title": {
-            "id": "title",
-            "table": "node",
-            "field": "title",
-            "label": "",
-            "alter": {
-              "alter_text": 0,
-              "make_link": 0,
-              "absolute": 0,
-              "trim": 0,
-              "word_boundary": 0,
-              "ellipsis": 0,
-              "strip_tags": 0,
-              "html": 0
-            },
-            "hide_empty": 0,
-            "empty_zero": 0,
-            "link_to_node": 1
-          }
-        },
-        "filters": {
-          "status": {
-            "value": 1,
-            "table": "node",
-            "field": "status",
-            "id": "status",
-            "expose": {
-              "operator": false
-            },
-            "group": 1
-          }
-        },
-        "sorts": [],
-        "title": "Pretty Calendar listing",
-        "row_options": {
-          "build_mode": "teaser",
-          "title": true,
-          "links": true,
-          "comments": false
-        },
-        "arguments": {
-          "nid": {
-            "id": "nid",
-            "table": "node",
-            "field": "nid",
-            "relationship": "none",
-            "group_type": "group",
-            "ui_name": "",
-            "default_action": "empty",
-            "exception": {
-              "value": "all",
-              "title_enable": 0,
-              "title": "All"
-            },
-            "title_enable": 0,
-            "title": "",
-            "breadcrumb_enable": 0,
-            "breadcrumb": "",
-            "default_argument_type": "fixed",
-            "default_argument_options": {
-              "argument": ""
-            },
-            "default_argument_skip_url": 0,
-            "summary_options": {
-              "base_path": "",
-              "count": "1",
-              "items_per_page": "25",
-              "override": 0
-            },
-            "summary": {
-              "sort_order": "asc",
-              "number_of_records": "0",
-              "format": "default_summary"
-            },
-            "specify_validation": 0,
-            "validate": {
-              "type": "none",
-              "fail": "not found"
-            },
-            "validate_options": [],
-            "break_phrase": 1,
-            "not": 0
-          }
-        },
-        "empty": {
-          "area": {
-            "id": "area",
-            "table": "views",
-            "field": "area",
-            "relationship": "none",
-            "group_type": "group",
-            "ui_name": "",
-            "label": "",
-            "empty": true,
-            "content": "<p>No results for the date specified.</p>\r\n",
-            "format": "filtered_html",
-            "tokenize": 0
-          }
+        "simple_list": {
+            "display_title": "Simple list",
+            "display_plugin": "embed",
+            "display_options": {
+                "query": {
+                    "type": "views_query",
+                    "options": []
+                },
+                "display_description": "A simple listing, used in modals and within the full view calendar block.",
+                "style_plugin": "list",
+                "defaults": {
+                    "style_plugin": false,
+                    "style_options": false,
+                    "row_plugin": false,
+                    "row_options": false
+                },
+                "style_options": {
+                    "grouping": [],
+                    "row_class": "",
+                    "default_row_class": 1,
+                    "row_class_special": 1,
+                    "type": "ul",
+                    "wrapper_class": "item-list",
+                    "class": ""
+                },
+                "row_plugin": "fields",
+                "row_options": {
+                    "default_field_elements": 1,
+                    "inline": [],
+                    "separator": "",
+                    "hide_empty": 0
+                }
+            }
         }
-      }
     }
-  }
 }

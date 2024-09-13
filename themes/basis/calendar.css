@@ -3,18 +3,18 @@
   min-height: 40px;
   width: 100%;
 }
-#calendar-body {
+.pretty-calendar--body {
   position: relative;
   width: 100%;
 }
-.calendar-container {
+.pretty-calendar--container {
   background-color: #f1f1f1;
   border: none;
   margin: 0;
   padding: .5rem;
 }
-.pretty-calendar-week,
-.calendar-daynames {
+.pretty-calendar--week,
+.pretty-calendar--daynames {
   font-size: 1rem;
   margin: 0;
   overflow: hidden;
@@ -22,71 +22,71 @@
   white-space: nowrap;
   width: 100%;
 }
-.pretty-calendar-week .pretty-calendar-weekend,
-.pretty-calendar-week .pretty-calendar-day,
-.calendar-daynames .pretty-calendar-weekend,
-.calendar-daynames .pretty-calendar-day {
+.pretty-calendar--week .pretty-calendar--weekend,
+.pretty-calendar--week .pretty-calendar--day,
+.pretty-calendar--daynames .pretty-calendar--weekend,
+.pretty-calendar--daynames .pretty-calendar--day {
   display: inline;
   float: left;
   overflow: visible;
   text-align: center;
   width: calc(100% / 7);
 }
-.pretty-calendar-week .pretty-calendar-weekend,
-.calendar-daynames .pretty-calendar-weekend {
+.pretty-calendar--week .pretty-calendar--weekend,
+.pretty-calendar--daynames .pretty-calendar--weekend {
   // color: #06c;
 }
-.pretty-calendar-week .calendar-value,
-.calendar-daynames .calendar-value {
+.pretty-calendar--week .pretty-calendar--value,
+.pretty-calendar--daynames .pretty-calendar--value {
   border: none;
   float: left;
   padding: .25rem 0 0;
   text-align: center;
   width: 100%;
 }
-.calendar-daynames .calendar-value .third-letter {
+.pretty-calendar--daynames .pretty-calendar--value .third-letter {
   display: none;
 }
-.pretty-calendar-week a {
+.pretty-calendar--week a {
   color: #0073bd;
   font-weight: bold;
 }
-.pretty-calendar-week a div {
+.pretty-calendar--week a div {
   // background-color: #dee4da;
   // text-decoration: underline;
 }
-.pretty-calendar-week a:hover div {
+.pretty-calendar--week a:hover div {
   background-color: rgba(0,0,0,.4);
   color: #fff;
 }
-.pretty-calendar-week .pretty-calendar-today {
+.pretty-calendar--week .pretty-calendar-today {
   color: #fff;
   background-color: #20252E;
 }
-.calendar-daynames {
+.pretty-calendar--daynames {
   border-bottom: none;
   text-transform: capitalize;
   font-size: .9rem;
   padding: .5rem 0 .25rem 0;
 }
 
-.pretty-calendar-month {
+.pretty-calendar--month {
   border-top: none;
 }
-.pretty-calendar-month a div {
+.pretty-calendar--month a div {
   text-decoration: none;
 }
-.pretty-calendar-month {
+.pretty-calendar--month {
   font-weight: bold;
   padding-top: 2px;
   text-align: center;
   width: 100%;
 }
-.pretty-calendar-month .month-title {
+.pretty-calendar--month .month-title {
   padding-top: 2px;
 }
-.pretty-calendar-month .calendar-prev,
-.pretty-calendar-month .calendar-next {
+.pretty-calendar--month .pretty-calendar--prev,
+.pretty-calendar--month .pretty-calendar--next {
   border: none;
   line-height: 1.4;
   margin: .25rem 0;
@@ -96,24 +96,24 @@
   max-width: 24px;
   max-height: 19px;
 }
-.pretty-calendar-month .calendar-prev {
+.pretty-calendar--month .pretty-calendar--prev {
   top: 2px;
   left: 2px;
 }
-.pretty-calendar-month .calendar-next {
+.pretty-calendar--month .pretty-calendar--next {
   top: 2px;
   right: 2px;
 }
-.pretty-calendar-month a.calendar-prev {
+.pretty-calendar--month a.pretty-calendar--prev {
   background: transparent url("../standard/arrows.png") no-repeat -24px 0;
 }
-.pretty-calendar-month a:hover.calendar-prev {
+.pretty-calendar--month a:hover.pretty-calendar--prev {
   background: transparent url("../standard/arrows.png") no-repeat 0 0;
 }
-.pretty-calendar-month a.calendar-next {
+.pretty-calendar--month a.pretty-calendar--next {
   background: transparent url("../standard/arrows.png") no-repeat -24px -18px;
 }
-.pretty-calendar-month a:hover.calendar-next {
+.pretty-calendar--month a:hover.pretty-calendar--next {
   background: transparent url("../standard/arrows.png") no-repeat 0 -18px;
 }
 

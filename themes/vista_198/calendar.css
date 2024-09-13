@@ -15,40 +15,40 @@
   font-family: Calibri, Arial, sans!important;
   font-size: 12px!important;
 }
-.calendar-container {
+.pretty-calendar--container {
   height: 114px;
   padding-top: 16px;
   position: relative;
   width: 192px;
 }
-#calendar-body {
+.pretty-calendar--body {
   position: relative;
 }
-.pretty-calendar-week {
+.pretty-calendar--week {
   clear: both;
   float: left;
   width: 192px;
 }
-.pretty-calendar-week .calendar-value {
+.pretty-calendar--week .pretty-calendar--value {
   cursor: default;
 }
-.pretty-calendar-week .calendar-value {
+.pretty-calendar--week .pretty-calendar--value {
   color: #999;
 }
-.pretty-calendar-day,
-.pretty-calendar-weekend {
+.pretty-calendar--day,
+.pretty-calendar--weekend {
   clear: none;
   float: left;
 }
 
-.pretty-calendar-month {
+.pretty-calendar--month {
   clear: both;
   float: none;
   position: absolute;
   top: -3px;
   width: 168px;
 }
-.pretty-calendar-month .month-title {
+.pretty-calendar--month .month-title {
   float: left;
   font-weight: bold;
   line-height: 12px;
@@ -57,48 +57,48 @@
   text-align: center;
   width: 138px;
 }
-.pretty-calendar-month a .calendar-value {
+.pretty-calendar--month a .pretty-calendar--value {
   color: #000;
   cursor: pointer;
   font-weight: bold;
 }
-.pretty-calendar-month .calendar-prev,
-.pretty-calendar-month .calendar-next {
+.pretty-calendar--month .pretty-calendar--prev,
+.pretty-calendar--month .pretty-calendar--next {
   background: transparent url("arrows.gif") no-repeat 4px 0;
   cursor: pointer;
   height: 12px;
   width: 10px;
 }
-.pretty-calendar-month .calendar-prev {
+.pretty-calendar--month .pretty-calendar--prev {
   float: left;
   margin: 2px 0 0 5px;
 }
-.pretty-calendar-month a.calendar-prev:hover {
+.pretty-calendar--month a.pretty-calendar--prev:hover {
   background: url("arrows.gif") no-repeat 4px -12px;
   text-decoration: none;
 }
-.pretty-calendar-month .calendar-next {
+.pretty-calendar--month .pretty-calendar--next {
   background: url("arrows.gif") no-repeat 0px -24px;
   float: right;
   margin: 2px 5px 0 0;
 }
-.pretty-calendar-month a.calendar-next:hover {
+.pretty-calendar--month a.pretty-calendar--next:hover {
   background: url("arrows.gif") no-repeat 0px -36px;
   text-decoration: none;
 }
 
-.calendar-daynames {
+.pretty-calendar--daynames {
   border-bottom: 1px solid #f5f5f5;
   border-top: 1px solid #f5f5f5;
   float: left;
   padding: 2px 0;
 }
-.calendar-daynames .calendar-value,
-.calendar-daynames .calendar-value span {
+.pretty-calendar--daynames .pretty-calendar--value,
+.pretty-calendar--daynames .pretty-calendar--value span {
   font-size: 11px!important;
   text-transform: capitalize;
 }
-#calendar-body  .calendar-value {
+.pretty-calendar--body  .pretty-calendar--value {
   display: block;
   float: left;
   height: 15px;
@@ -108,18 +108,18 @@
   text-align: center;
   width: 24px;
 }
-.pretty-calendar-week a div {
+.pretty-calendar--week a div {
   background: url("day.gif") no-repeat 0 -48px;
 }
-.pretty-calendar-week a:hover div {
+.pretty-calendar--week a:hover div {
   background: url("day.gif") no-repeat 0 0;
   color: #06c;
 }
-.pretty-calendar-week .pretty-calendar-today div {
+.pretty-calendar--week .pretty-calendar-today div {
   background: url("day.gif") no-repeat 0 -16px;
   color: #06c;
 }
-.pretty-calendar-week .pretty-calendar-today div:hover {
+.pretty-calendar--week .pretty-calendar-today div:hover {
   background: url("day.gif") no-repeat 0 -32px;
   color: #000;
 }

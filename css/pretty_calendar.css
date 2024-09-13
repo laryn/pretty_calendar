@@ -63,3 +63,24 @@
     background-color: rgba(0, 115, 189, 0.1);
   }
 }
+
+.calendar-day-content {
+  white-space: wrap;
+}
+
+.pretty-calendar--full.pretty-calendar--popup {
+  .pretty-calendar--link__link {
+    display: none;
+  }
+  .pretty-calendar--link__popup {
+    display: block;
+  }
+  @media (min-width: 62em) {
+    .pretty-calendar--link__link {
+      display: block;
+    }
+    .pretty-calendar--link__popup {
+      display: none;
+    }
+  }
+}
