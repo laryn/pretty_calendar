@@ -688,15 +688,15 @@ function pretty_calendar_links_loader($year, $month, $day, $page_mode = 'nojs') 
   if (count($nodes) > 0) {
     $event_count = config_get('pretty_calendar.settings', 'event_count');
     $counter = 0;
-    $list = array();
+    $nids = array();
     foreach ($nodes as $node) {
-      $list['items'][] = l($node->title, 'node/' . $node->nid);
+      $nids[] = $node->nid;
       $counter++;
       if ($counter >= $event_count) {
         break;
       }
     }
-    $markup .= theme('item_list', $list);
+    $markup .= views_embed_view('pretty_calendar', 'simple_list', implode('+', $nids));
   }
   else {
     $markup .= '<p class="pretty-calendar--shortlist__empty">' . t('No @events', array('@events' => $events_name)) . '</p>';
