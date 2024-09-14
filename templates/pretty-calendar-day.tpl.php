@@ -42,7 +42,7 @@
   <?php endif; ?>
 
   <?php if (!empty($day_content)) : ?>
-    <div class="calendar-day-content">
+    <div class="pretty-calendar--day-content">
       <?php print $day_content; ?>
     </div>
   <?php endif; ?>

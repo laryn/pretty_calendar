@@ -25,7 +25,7 @@
       <a href="#" rel="<?php print $month_prev; ?>" class="pretty-calendar--prev" aria-label="<?php print $month_prev_text; ?>">
         <div>&nbsp;</div>
       </a>
-      <div class="month-title"><?php print $month_name; ?></div>
+      <div class="pretty-calendar--month-title"><?php print $month_name; ?></div>
       <a href="#" rel="<?php print $month_next; ?>" class="pretty-calendar--next" aria-label="<?php print $month_next_text; ?>">
         <div>&nbsp;</div>
       </a>
