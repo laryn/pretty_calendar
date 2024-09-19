@@ -571,10 +571,10 @@ function pretty_calendar_block_content($month, $mode = 'simple') {
         $wrapper_classes_array[] = 'pretty-calendar--weekend';
       }
       if ($day == date('d', $now) && date('m.Y', $now) == date('m.Y', $month)) {
-        $wrapper_classes_array[] = 'pretty-calendar-today';
+        $wrapper_classes_array[] = 'pretty-calendar--today';
       }
       if (arg(3) == $day && arg(2) == date('m', $month) && arg(1) == date('Y', $month) && arg(0) == 'calendar') {
-        $wrapper_classes_array[] = 'pretty-calendar-selected';
+        $wrapper_classes_array[] = 'pretty-calendar--selected';
       }
       $count = !empty($day) ? $day_count[$day] : 0;
       if (!$count) {
