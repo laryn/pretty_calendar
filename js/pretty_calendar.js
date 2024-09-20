@@ -31,7 +31,7 @@
         $calendar.replaceWith(data);
         Backdrop.detachBehaviors(".pretty-calendar--body");
         Backdrop.attachBehaviors(".pretty-calendar--body");
-        var $month = $calendar.find(".month-title").text();
+        var $month = $calendar.find(".pretty-calendar--month-title").text();
         Backdrop.announce(Backdrop.t('The calendar has been refreshed with content from !month.', { '!month': $month }));
       });
     },
@@ -39,4 +39,3 @@
   }
 
 })(jQuery, Backdrop);
-
