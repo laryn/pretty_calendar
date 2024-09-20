@@ -559,7 +559,12 @@ function pretty_calendar_block_content($month, $mode = 'simple') {
   for ($i = 0; $i < count($week); $i++) {
     for ($j = 0; $j < 7; $j++) {
       $day = !empty($week[$i][$j]) ? $week[$i][$j] : '';
-      $day_content = ($mode == 'full' && !empty($day_count[$day])) ? views_embed_view('pretty_calendar', 'simple_list', implode('+', $day_nids[$day])) : '';
+      if ($mode == 'full') {
+        $day_content = (!empty($day_count[$day])) ? views_embed_view('pretty_calendar', 'simple_list', implode('+', $day_nids[$day])) : t('No events');
+      }
+      else {
+        $day_content = '';
+      }
       $wrapper_classes_array = [];
       $link_classes_array = [
         'pretty-calendar--link',
