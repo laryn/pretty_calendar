@@ -10,6 +10,7 @@
  * - $daynames_class: The array of classes for each day name; allows different
  *              classes for weekend days.
  * - $content: Rendered weeks.
+ * - $mode: The view mode; either 'full' or 'simple'.
  * - $month_name: Selected month name
  * - $month_prev: Previous month time (Unix)
  * - $month_prev_text: Previous month text, run through t() for translation.
@@ -25,7 +26,11 @@
       <a href="#" rel="<?php print $month_prev; ?>" class="pretty-calendar--prev" aria-label="<?php print $month_prev_text; ?>">
         <div>&nbsp;</div>
       </a>
-      <div class="pretty-calendar--month-title"><?php print $month_name; ?></div>
+      <?php if ($mode == 'full'): ?>
+        <h2 class="pretty-calendar--month-title"><?php print $month_name; ?></h2>
+      <?php else: ?>
+        <h3 class="pretty-calendar--month-title"><?php print $month_name; ?></h3>
+      <?php endif; ?>
       <a href="#" rel="<?php print $month_next; ?>" class="pretty-calendar--next" aria-label="<?php print $month_next_text; ?>">
         <div>&nbsp;</div>
       </a>
