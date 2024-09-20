@@ -935,36 +935,34 @@ function pretty_calendar_day_nodes($year = 0, $month = 0, $day = 0) {
     $date = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year) + $count * 86400;
     $show_today_indicator = (empty($count) && date('Y-m-d', $now) == $year . '-' . $month . '-' . $day);
     $dateresult = pretty_calendar_node_list($date);
-    if ($dateresult) {
-      if ($show_pager) {
-        $prev_date = $date - (($upcoming_days + 1) * 86400);
-        $pager_prev_link = url('calendar/' . date('Y', $prev_date) . '/' . date('m', $prev_date) . '/' . date('d', $prev_date));
-        $pager_prev_title = format_date($prev_date, $date_format_listing, NULL, NULL, $language->langcode);
-        $next_date = $date + (($upcoming_days + 1) * 86400);
-        $pager_next_link = url('calendar/' . date('Y', $next_date) . '/' . date('m', $next_date) . '/' . date('d', $next_date));
-        $pager_next_title = format_date($next_date, $date_format_listing, NULL, NULL, $language->langcode);
-      }
-      else {
-        $pager_prev_link = NULL;
-        $pager_prev_title = NULL;
-        $pager_next_link = NULL;
-        $pager_next_title = NULL;
-      }
-      $output .= theme('pretty_calendar_node_listing', array(
-        'show_today_indicator' => $show_today_indicator,
-        'date_title' => format_date($date, $date_format_listing, NULL, NULL, $language->langcode),
-        'show_pager' => $show_pager,
-        'pager_prev_link' => $pager_prev_link,
-        'pager_prev_title' => $pager_prev_title,
-        'pager_next_link' => $pager_next_link,
-        'pager_next_title' => $pager_next_title,
-        'content' => $dateresult,
-      ));
-      // If we've already shown the pager once, we don't need to do it anymore
-      // on potential upcoming days (ie. if we're showing additional upcoming
-      // days).
-      $show_pager = 0;
+    if ($show_pager) {
+      $prev_date = $date - (($upcoming_days + 1) * 86400);
+      $pager_prev_link = url('calendar/' . date('Y', $prev_date) . '/' . date('m', $prev_date) . '/' . date('d', $prev_date));
+      $pager_prev_title = format_date($prev_date, $date_format_listing, NULL, NULL, $language->langcode);
+      $next_date = $date + (($upcoming_days + 1) * 86400);
+      $pager_next_link = url('calendar/' . date('Y', $next_date) . '/' . date('m', $next_date) . '/' . date('d', $next_date));
+      $pager_next_title = format_date($next_date, $date_format_listing, NULL, NULL, $language->langcode);
     }
+    else {
+      $pager_prev_link = NULL;
+      $pager_prev_title = NULL;
+      $pager_next_link = NULL;
+      $pager_next_title = NULL;
+    }
+    $output .= theme('pretty_calendar_node_listing', array(
+      'show_today_indicator' => $show_today_indicator,
+      'date_title' => format_date($date, $date_format_listing, NULL, NULL, $language->langcode),
+      'show_pager' => $show_pager,
+      'pager_prev_link' => $pager_prev_link,
+      'pager_prev_title' => $pager_prev_title,
+      'pager_next_link' => $pager_next_link,
+      'pager_next_title' => $pager_next_title,
+      'content' => $dateresult,
+    ));
+    // If we've already shown the pager once, we don't need to do it anymore
+    // on potential upcoming days (ie. if we're showing additional upcoming
+    // days).
+    $show_pager = 0;
     $count++;
   } while ($count <= $upcoming_days);
 
@@ -986,7 +984,9 @@ function pretty_calendar_day_nodes($year = 0, $month = 0, $day = 0) {
 function pretty_calendar_node_list($date = 0) {
   backdrop_set_title(config_get('pretty_calendar.settings', 'page_title'));
   $nids = pretty_calendar_select_nodes($date);
-  return views_embed_view('pretty_calendar', 'teaser_list', implode('+', $nids));
+  $filter = (!empty($nids)) ? implode('+', $nids) : NULL;
+  $result = views_embed_view('pretty_calendar', 'teaser_list', $filter);
+  return $result;
 }
 
 /**
