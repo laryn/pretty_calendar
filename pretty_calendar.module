@@ -517,14 +517,14 @@ function pretty_calendar_block_content($month, $mode = 'simple') {
   // Get names of the days.
   $daynames = array();
   for ($i = 0; $i <= 6; $i++) {
+    $dayname_format = ($mode == 'full') ? 'l' : 'D';
     $adjusted_day = ($i + $first_day) % 7;
-    $daynames[$i] = format_date(mktime(0, 0, 0, 1, $adjusted_day, 2001), 'custom', 'D', NULL, $language->langcode);
+    $daynames[$i] = format_date(mktime(0, 0, 0, 1, $adjusted_day, 2001), 'custom', $dayname_format, NULL, $language->langcode);
     $daynames_class[$i] = ($i == 6 || ($first_day && $i == 5) || (!$first_day && $i == 0)) ? 'pretty-calendar--day pretty-calendar--weekend' : 'pretty-calendar--day';
   }
 
   // Get month name. Add context to t() for extended translation.
   $month_name = t(format_date($month, 'custom', 'F', NULL, 'en'), array(), array('context' => 'Nominative')) . ' ' . date('Y', $month);
-  $field_name = $config->get('field_name');
   $column_name_start = $config->get('column_name_start');
   $link_type = $config->get('link_type');
 
@@ -585,7 +585,6 @@ function pretty_calendar_block_content($month, $mode = 'simple') {
       if (!$count) {
         $wrapper_classes_array[] = ($day < $day_count && $day != "") ? 'pretty-calendar--empty' : 'pretty-calendar--blank';
       }
-
       $link_title = (!empty($day)) ? pretty_calendar_plural($count) : '';
       $link_types = array('popup', 'link');
       $day_settings = array(
@@ -1003,7 +1002,6 @@ function _pretty_calendar_get_timezone_offset() {
   $dateTimeZoneUTC = new DateTimeZone("UTC");
   $dateTimeZoneServer = new DateTimeZone($timezone);
   $dateTimeUTC = new DateTime("now", $dateTimeZoneUTC);
-  $dateTimeServer = new DateTime("now", $dateTimeZoneServer);
 
   $timeOffset = $dateTimeZoneServer->getOffset($dateTimeUTC);
 
