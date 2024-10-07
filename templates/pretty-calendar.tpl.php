@@ -26,16 +26,16 @@
       <a href="#" rel="<?php print $month_prev; ?>" class="pretty-calendar--prev" aria-label="<?php print $month_prev_text; ?>">
         <div>&nbsp;</div>
       </a>
-      <?php if ($mode == 'full'): ?>
+      <?php if ($mode == 'full') : ?>
         <h2 class="pretty-calendar--month-title"><?php print $month_name; ?></h2>
-      <?php else: ?>
+      <?php else : ?>
         <h3 class="pretty-calendar--month-title"><?php print $month_name; ?></h3>
       <?php endif; ?>
       <a href="#" rel="<?php print $month_next; ?>" class="pretty-calendar--next" aria-label="<?php print $month_next_text; ?>">
         <div>&nbsp;</div>
       </a>
     </div>
-    <div class="pretty-calendar--daynames">
+    <div aria-hidden="true" class="pretty-calendar--daynames">
       <div class="<?php print $daynames_class[0]; ?>"><div class="pretty-calendar--value"><?php print $daynames[0]; ?></div></div>
       <div class="<?php print $daynames_class[1]; ?>"><div class="pretty-calendar--value"><?php print $daynames[1]; ?></div></div>
       <div class="<?php print $daynames_class[2]; ?>"><div class="pretty-calendar--value"><?php print $daynames[2]; ?></div></div>
