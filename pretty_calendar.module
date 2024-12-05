@@ -477,6 +477,8 @@ function pretty_calendar_block_content($month, $mode = 'simple') {
   $config = config('pretty_calendar.settings');
   // Get system settings for first day of the week. 0 = Sunday, 1 = Monday, etc.
   $first_day = config_get('system.date', 'first_day');
+  // Timezone offset.
+  $timezone_offset = _pretty_calendar_get_timezone_offset();
 
   // Format month array.
   // Get month timestamp.
@@ -544,10 +546,10 @@ function pretty_calendar_block_content($month, $mode = 'simple') {
   else {
     foreach ($nodes as $node) {
       if (isset($node->$column_name_start)) {
-        $node_day = (int) date('d', strtotime($node->$column_name_start));
+        $node_day = (int) date('d', strtotime($node->$column_name_start) + $timezone_offset);
       }
       elseif (isset($node->created)) {
-        $node_day = (int) date('d', $node->created);
+        $node_day = (int) date('d', $node->created + $timezone_offset);
       }
       $day_count[$node_day]++;
       $day_nids[$node_day][$node->nid] = $node->nid;
@@ -555,7 +557,7 @@ function pretty_calendar_block_content($month, $mode = 'simple') {
   }
 
   // Format theme array.
-  $now = time() + _pretty_calendar_get_timezone_offset();
+  $now = time() + $timezone_offset;
   $days = array();
   for ($i = 0; $i < count($week); $i++) {
     for ($j = 0; $j < 7; $j++) {
